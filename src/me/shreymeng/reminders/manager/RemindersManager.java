@@ -20,69 +20,69 @@ public class RemindersManager {
   }
   
   //TODO TEST : Sort by due date and priority.
-	public static List<Reminder> getReminders() {
-		List<Long> very_high_dueDates = new ArrayList<>();
-		List<Long> high_dueDates = new ArrayList<>();
-		List<Long> normal_dueDates = new ArrayList<>();
-		List<Long> low_dueDates = new ArrayList<>();
-		List<Reminder> sortedReminders = new ArrayList<>();
-		
-		for (Reminder reminder : reminders) {
-			if (reminder.getPriority() == Priority.VERY_HIGH) {
-				very_high_dueDates.add(reminder.getDueDate());
-				
-			} else if (reminder.getPriority() == Priority.HIGH) {
-				high_dueDates.add(reminder.getDueDate());
-				
-			} else if (reminder.getPriority() == Priority.NORMAL) {
-				normal_dueDates.add(reminder.getDueDate());
-				
-			} else if (reminder.getPriority() == Priority.LOW) {
-				low_dueDates.add(reminder.getDueDate());
+  public static List<Reminder> getReminders() {
+	List<Long> very_high_dueDates = new ArrayList<>();
+	List<Long> high_dueDates = new ArrayList<>();
+	List<Long> normal_dueDates = new ArrayList<>();
+	List<Long> low_dueDates = new ArrayList<>();
+	List<Reminder> sortedReminders = new ArrayList<>();
+
+	for (Reminder reminder : reminders) {
+		if (reminder.getPriority() == Priority.VERY_HIGH) {
+			very_high_dueDates.add(reminder.getDueDate());
+
+		} else if (reminder.getPriority() == Priority.HIGH) {
+			high_dueDates.add(reminder.getDueDate());
+
+		} else if (reminder.getPriority() == Priority.NORMAL) {
+			normal_dueDates.add(reminder.getDueDate());
+
+		} else if (reminder.getPriority() == Priority.LOW) {
+			low_dueDates.add(reminder.getDueDate());
+		}
+	}
+
+	selectionSort(very_high_dueDates);
+	for (int i = 0; i < very_high_dueDates.size(); i++) {
+		for (int j = 0; j < reminders.size(); j++) {
+			if (reminders.get(j).getPriority() == Priority.VERY_HIGH && reminders.get(j).getDueDate() == very_high_dueDates.get(i)) {
+				sortedReminders.add(reminders.get(j));
 			}
 		}
-		
-		selectionSort(very_high_dueDates);
-		for (int i = 0; i < very_high_dueDates.size(); i++) {
-			for (int j = 0; j < reminders.size(); j++) {
-				if (reminders.get(j).getPriority() == Priority.VERY_HIGH && reminders.get(j).getDueDate() == very_high_dueDates.get(i)) {
-					sortedReminders.add(reminders.get(j));
-				}
+	}
+
+	selectionSort(high_dueDates);
+	for (int i = 0; i < high_dueDates.size(); i++) {
+		for (int j = 0; j < reminders.size(); j++) {
+			if (reminders.get(j).getPriority() == Priority.HIGH && reminders.get(j).getDueDate() == high_dueDates.get(i)) {
+				sortedReminders.add(reminders.get(j));
 			}
 		}
-		
-		selectionSort(high_dueDates);
-		for (int i = 0; i < high_dueDates.size(); i++) {
-			for (int j = 0; j < reminders.size(); j++) {
-				if (reminders.get(j).getPriority() == Priority.HIGH && reminders.get(j).getDueDate() == high_dueDates.get(i)) {
-					sortedReminders.add(reminders.get(j));
-				}
+	}
+
+	selectionSort(normal_dueDates);
+	for (int i = 0; i < normal_dueDates.size(); i++) {
+		for (int j = 0; j < reminders.size(); j++) {
+			if (reminders.get(j).getPriority() == Priority.NORMAL && reminders.get(j).getDueDate() == normal_dueDates.get(i)) {
+				sortedReminders.add(reminders.get(j));
 			}
 		}
-		
-		selectionSort(normal_dueDates);
-		for (int i = 0; i < normal_dueDates.size(); i++) {
-			for (int j = 0; j < reminders.size(); j++) {
-				if (reminders.get(j).getPriority() == Priority.NORMAL && reminders.get(j).getDueDate() == normal_dueDates.get(i)) {
-					sortedReminders.add(reminders.get(j));
-				}
+	}
+
+	selectionSort(low_dueDates);
+	for (int i = 0; i < low_dueDates.size(); i++) {
+		for (int j = 0; j < reminders.size(); j++) {
+			if (reminders.get(j).getPriority() == Priority.LOW && reminders.get(j).getDueDate() == low_dueDates.get(i)) {
+				sortedReminders.add(reminders.get(j));
 			}
 		}
-		
-		selectionSort(low_dueDates);
-		for (int i = 0; i < low_dueDates.size(); i++) {
-			for (int j = 0; j < reminders.size(); j++) {
-				if (reminders.get(j).getPriority() == Priority.LOW && reminders.get(j).getDueDate() == low_dueDates.get(i)) {
-					sortedReminders.add(reminders.get(j));
-				}
-			}
-		}
-		
-		for(int i = 0; i < sortedReminders.size(); i++) {
-			reminders.set(i, sortedReminders.get(i));
-		}
-		
-		return reminders;
+	}
+
+	for(int i = 0; i < sortedReminders.size(); i++) {
+		reminders.set(i, sortedReminders.get(i));
+	}
+
+	return reminders;
 	}
 
   //TODO Sort by due date and priority.
@@ -93,22 +93,22 @@ public class RemindersManager {
   }
   
   public static void selectionSort(List<Long> arr) {
-		long start = 0L;
-		long end = 0L;
+	long start = 0L;
+	long end = 0L;
 
-		for (int i = 0; i < arr.size(); i++) {
-			long min = arr.get(i);
-			int minInd = i;
-			for (int j = i+1; j < arr.size(); j++) {
-				if (arr.get(j) < min) {
-					min = arr.get(j);
-					minInd = j;
-				}
+	for (int i = 0; i < arr.size(); i++) {
+		long min = arr.get(i);
+		int minInd = i;
+		for (int j = i+1; j < arr.size(); j++) {
+			if (arr.get(j) < min) {
+				min = arr.get(j);
+				minInd = j;
 			}
-			// swapping
-			long swap = arr.get(i);
-			arr.set(i, min);
-			arr.set(minInd, swap);
 		}
+		// swapping
+		long swap = arr.get(i);
+		arr.set(i, min);
+		arr.set(minInd, swap);
 	}
+}
 }
