@@ -66,6 +66,14 @@ public class Reminder {
   public Set<Label> getLabels() {
     return labels;
   }
+  
+  public void addLabel(Label label) {
+    this.labels.add(label);
+  }
+  
+  public void removeLabel(Label label) {
+    this.labels.remove(label);
+  }
 
   public Category getCategory() {
     return (Category) labels.stream().filter(Category.class::isInstance).findFirst().orElse(null);
