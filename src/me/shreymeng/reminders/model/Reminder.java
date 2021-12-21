@@ -14,7 +14,6 @@ public class Reminder {
   private String description;
   private long dueDate;
   private Priority priority;
-  //TODO Add methods for adding/removing labels.
   private final Set<Label> labels = new HashSet<>();
 
   public Reminder(String id, String task, String description, long dueDate, Priority priority,
