@@ -7,6 +7,7 @@ import me.shreymeng.reminders.model.Category;
 import me.shreymeng.reminders.model.Label;
 import me.shreymeng.reminders.model.Priority;
 import me.shreymeng.reminders.model.Reminder;
+import me.shreymeng.reminders.model.SortBy;
 
 public class Main {
 
@@ -34,7 +35,7 @@ public class Main {
     RemindersManager.addReminder(reminder1);
     RemindersManager.addReminder(reminder2);
 
-    for (Reminder reminder : RemindersManager.getReminders()) {
+    for (Reminder reminder : RemindersManager.getReminders(SortBy.PRIORITY)) {
       System.out.println(reminder);
     }
   }
