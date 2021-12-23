@@ -6,16 +6,47 @@ import java.util.Objects;
 import java.util.Set;
 import me.shreymeng.reminders.util.Common;
 
+/**
+ * An active reminder.
+ */
 public class Reminder {
 
+  /**
+   * The randomly generated ID of the reminder, used for identification.
+   */
   private final String id;
 
+  /**
+   * The reminder task.
+   */
   private String task;
+  /**
+   * A description of the task.
+   */
   private String description;
+  /**
+   * The due date of the task, in unix epoch (milliseconds).
+   */
   private long dueDate;
+  /**
+   * The priority of the task.
+   */
   private Priority priority;
+  /**
+   * All labels belonging to the task.
+   */
   private final Set<Label> labels = new HashSet<>();
 
+  /**
+   * Creates a new reminder object.
+   *
+   * @param id          The unique identifier
+   * @param task        The task name
+   * @param description The task description
+   * @param dueDate     The task due date
+   * @param priority    The task priority
+   * @param labels      The set of labels belonging to the task
+   */
   public Reminder(String id, String task, String description, long dueDate, Priority priority,
       Label... labels) {
     this.id = id;
@@ -65,15 +96,21 @@ public class Reminder {
   public Set<Label> getLabels() {
     return labels;
   }
-  
+
   public void addLabel(Label label) {
     this.labels.add(label);
   }
-  
+
   public void removeLabel(Label label) {
     this.labels.remove(label);
   }
 
+  /**
+   * Gets the category of the reminder. If the reminder has multiple categories for whichever
+   * reason, the method will return the first one it finds.
+   *
+   * @return The category of the task
+   */
   public Category getCategory() {
     return (Category) labels.stream().filter(Category.class::isInstance).findFirst().orElse(null);
   }
