@@ -55,6 +55,10 @@ public class TitleGUI {
     final JButton button = new JButton("Start");
     button.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 24));
     button.setBounds(502, 325, 275, 75);
+    button.addActionListener(e -> {
+      new MainGUI();
+      frame.dispose();
+    });
     frame.add(button);
 
     frame.setVisible(true);
