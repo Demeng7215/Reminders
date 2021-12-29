@@ -11,9 +11,12 @@ import javax.swing.WindowConstants;
 import me.shreymeng.reminders.Main;
 import me.shreymeng.reminders.util.Common;
 
-public class TitleMenu {
+/**
+ * The splash screen displaying basic project information on startup.
+ */
+public class TitleGUI {
 
-  public TitleMenu() {
+  public TitleGUI() {
 
     final JFrame frame = new JFrame("Reminders (v" + Main.VERSION + ")");
     frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -48,6 +51,7 @@ public class TitleMenu {
     versionPanel.setBounds(1010, 650, 250, 30);
     frame.add(versionPanel);
 
+    // Stand button.
     final JButton button = new JButton("Start");
     button.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 24));
     button.setBounds(502, 325, 275, 75);

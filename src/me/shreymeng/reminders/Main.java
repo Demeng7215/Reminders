@@ -3,7 +3,7 @@ package me.shreymeng.reminders;
 import java.awt.EventQueue;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import me.shreymeng.reminders.ui.TitleMenu;
+import me.shreymeng.reminders.ui.TitleGUI;
 
 public class Main {
 
@@ -11,6 +11,7 @@ public class Main {
 
   public static void main(String[] args) {
 
+    // Set the look and feel of the GUI.
     try {
       UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
     } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
@@ -18,6 +19,7 @@ public class Main {
       System.err.println("Unsupported operating system.");
     }
 
-    EventQueue.invokeLater(TitleMenu::new);
+    // Create and open the title GUI.
+    EventQueue.invokeLater(TitleGUI::new);
   }
 }
