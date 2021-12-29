@@ -9,6 +9,7 @@ public class MainGUI {
 
     final JFrame frame = new JFrame("My Reminders");
     frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    frame.setResizable(false);
     frame.setSize(1280, 720);
     frame.setLocationRelativeTo(null);
 
