@@ -7,6 +7,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import me.shreymeng.reminders.Main;
 import me.shreymeng.reminders.util.Common;
@@ -27,8 +28,15 @@ public class TitleGUI {
     // App logo.
     final JPanel logoPanel = new JPanel();
     logoPanel.add(Common.getImage("logo.png"));
-    logoPanel.setBounds(390, 200, 500, 100);
+    logoPanel.setBounds(390, 190, 500, 100);
     frame.add(logoPanel);
+
+    // Description.
+    final JLabel description = new JLabel(
+        "Keeping track of everything you need to get done.", SwingConstants.CENTER);
+    description.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
+    description.setBounds(290, 280, 700, 30);
+    frame.add(description);
 
     // Authors, course, and teacher information.
     final JPanel infoPanel = new JPanel();
@@ -54,7 +62,7 @@ public class TitleGUI {
     // Stand button.
     final JButton button = new JButton("Start");
     button.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 24));
-    button.setBounds(502, 325, 275, 75);
+    button.setBounds(502, 360, 275, 75);
     button.addActionListener(e -> {
       new MainGUI();
       frame.dispose();
