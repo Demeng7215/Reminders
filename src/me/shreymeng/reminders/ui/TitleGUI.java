@@ -42,13 +42,13 @@ public class TitleGUI {
     // Authors, course, and teacher information.
     final JPanel infoPanel = new JPanel();
     final JLabel infoLabel = new JLabel("<html>"
-        + "<p><b>Authors:</b> Demeng & Shreya</p></br>"
+        + "<p><b>Authors:</b> Demeng Chen & Shreya Sirgound</p></br>"
         + "<p><b>Course:</b> ICS3U7-02</p></br>"
         + "<p><b>Teacher:</b> Ms. Xie</p>"
         + "</html>");
     infoLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 18));
     infoPanel.add(infoLabel);
-    infoPanel.setBounds(0, 595, 250, 90);
+    infoPanel.setBounds(0, 595, 380, 90);
     frame.add(infoPanel);
 
     // Version information.
