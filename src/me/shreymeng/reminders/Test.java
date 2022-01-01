@@ -2,6 +2,7 @@ package me.shreymeng.reminders;
 
 import java.awt.Color;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 import me.shreymeng.reminders.manager.LabelsManager;
 import me.shreymeng.reminders.manager.RemindersManager;
 import me.shreymeng.reminders.model.Label;
@@ -13,33 +14,52 @@ public class Test {
 
   public static void main(String[] args) {
 
-    final Label schoolLabel = new Label("School", Color.GREEN, true);
-    final Label economicsLabel = new Label("Economics", Color.BLUE, false);
+    addTestReminders();
 
-    LabelsManager.addLabel(schoolLabel);
-    LabelsManager.addLabel(economicsLabel);
+    for (Reminder reminder : RemindersManager.getReminders(SortBy.DUE_DATE)) {
+      System.out.println(reminder);
+    }
+  }
+
+  public static void addTestReminders() {
+
+    final Label label1 = new Label("Label 1", Color.BLUE, true);
+    final Label label2 = new Label("Label 2", Color.ORANGE, false);
+    final Label label3 = new Label("Label 3", Color.GRAY, false);
+
+    LabelsManager.addLabel(label1);
+    LabelsManager.addLabel(label2);
+    LabelsManager.addLabel(label3);
 
     final Reminder reminder1 = new Reminder(
         UUID.randomUUID().toString(),
-        "Microeconomics Commentary: First Draft",
-        "Finish the first 5 paragraphs of the commentary.",
+        "Reminder 1",
+        "Test reminder 1.",
         System.currentTimeMillis(),
         Priority.HIGH,
-        schoolLabel, economicsLabel);
+        label1, label3);
 
     final Reminder reminder2 = new Reminder(
         UUID.randomUUID().toString(),
-        "Microeconomics Commentary: Final Copy",
-        "Final version of the commentary, bring a duotang!",
-        System.currentTimeMillis() + 100000,
-        Priority.VERY_HIGH,
-        schoolLabel, economicsLabel);
+        "Reminder 2",
+        "Test reminder 2.",
+        System.currentTimeMillis() - 1000000000,
+        Priority.LOW,
+        label2, label3);
 
     RemindersManager.addReminder(reminder1);
     RemindersManager.addReminder(reminder2);
 
-    for (Reminder reminder : RemindersManager.getReminders(SortBy.PRIORITY)) {
-      System.out.println(reminder);
+    for (int i = 3; i <= 10; i++) {
+      final Reminder reminder = new Reminder(
+          UUID.randomUUID().toString(),
+          "Reminder " + i,
+          "Some random description...",
+          System.currentTimeMillis() + ThreadLocalRandom.current().nextInt(),
+          Priority.values()[ThreadLocalRandom.current().nextInt(Priority.values().length)],
+          label2, label3);
+
+      RemindersManager.addReminder(reminder);
     }
   }
 }
