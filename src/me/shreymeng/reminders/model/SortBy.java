@@ -14,22 +14,30 @@ public enum SortBy {
   /**
    * Sorting by due date, from reminders with closer due dates to ones with farther due dates.
    */
-  DUE_DATE(new DueDateSort()),
+  DUE_DATE("Due Date", new DueDateSort()),
   /**
    * Sorting by priority, from the highest priority to the lowest priority. Tasks with the same
    * priority will be sorted by due date ({@link #DUE_DATE}).
    */
-  PRIORITY(new PrioritySort());
+  PRIORITY("Priority", new PrioritySort());
 
+  private final String name;
   private final SortingMethod method;
 
   /**
    * Creates a new sorting method.
    *
+   * @param name   The display name of this method
    * @param method The sorting handler for this method
    */
-  SortBy(SortingMethod method) {
+  SortBy(String name, SortingMethod method) {
+    this.name = name;
     this.method = method;
+  }
+
+  @Override
+  public String toString() {
+    return name;
   }
 
   /**
