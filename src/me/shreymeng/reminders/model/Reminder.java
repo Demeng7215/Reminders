@@ -105,16 +105,6 @@ public class Reminder {
     this.labels.remove(label);
   }
 
-  /**
-   * Gets the category of the reminder. If the reminder has multiple categories for whichever
-   * reason, the method will return the first one it finds.
-   *
-   * @return The category of the task
-   */
-  public Category getCategory() {
-    return (Category) labels.stream().filter(Category.class::isInstance).findFirst().orElse(null);
-  }
-
   @Override
   public String toString() {
     return "Reminder{" +
