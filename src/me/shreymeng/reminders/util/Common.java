@@ -17,13 +17,13 @@ import javax.swing.JLabel;
 public class Common {
 
   private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern(
-      "MMMM dd yyyy");
+      "MMM d yyyy");
   private static final DateTimeFormatter DATE_NO_YEAR_FORMAT = DateTimeFormatter.ofPattern(
-      "MMMM dd");
+      "MMM d");
   private static final DateTimeFormatter DATE_TIME_FORMAT = DateTimeFormatter.ofPattern(
-      "MMMM dd yyyy h:mma");
+      "MMM d yyyy h:mma");
   private static final DateTimeFormatter DATE_TIME_NO_YEAR_FORMAT = DateTimeFormatter.ofPattern(
-      "MMMM dd h:mma");
+      "MMM d h:mma");
 
   private static final String ASSETS_FOLDER = "assets";
 
@@ -35,6 +35,8 @@ public class Common {
    */
   public static String formatDateTime(long dateTime) {
 
+    final String formatted;
+
     final LocalDateTime localDate = new Date(dateTime)
         .toInstant()
         .atZone(ZoneId.systemDefault())
@@ -43,10 +45,12 @@ public class Common {
     final boolean includeTime = !(localDate.getHour() == 0 && localDate.getMinute() == 0);
 
     if (localDate.getYear() == LocalDate.now().getYear()) {
-      return localDate.format(includeTime ? DATE_TIME_NO_YEAR_FORMAT : DATE_NO_YEAR_FORMAT);
+      formatted = localDate.format(includeTime ? DATE_TIME_NO_YEAR_FORMAT : DATE_NO_YEAR_FORMAT);
+    } else {
+      formatted = localDate.format(includeTime ? DATE_TIME_FORMAT : DATE_FORMAT);
     }
 
-    return localDate.format(includeTime ? DATE_TIME_FORMAT : DATE_FORMAT);
+    return formatted.replace(".", "");
   }
 
   /**
