@@ -10,6 +10,7 @@ import me.shreymeng.reminders.model.Priority;
 import me.shreymeng.reminders.model.Reminder;
 import me.shreymeng.reminders.model.SortBy;
 
+//TODO Remove in production.
 public class Test {
 
   public static void main(String[] args) {

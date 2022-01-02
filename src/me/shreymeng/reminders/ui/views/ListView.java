@@ -45,6 +45,8 @@ public class ListView extends JPanel implements IRemindersView {
   @Override
   public void refresh() {
 
+    //TODO Bring user back to original tab and scroll position.
+
     // Remove the current tabbed pane.
     if (currentCategoryTabs != null) {
       remove(currentCategoryTabs);
