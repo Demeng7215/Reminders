@@ -10,7 +10,7 @@ import me.shreymeng.reminders.model.Label;
 public class LabelsManager {
 
   //TODO Implement GSON file saving/loading.
-  private static final List<Label> labels = new ArrayList<>();
+  private static final List<Label> LABELS = new ArrayList<>();
 
   /**
    * Registers a new label.
@@ -18,7 +18,7 @@ public class LabelsManager {
    * @param label The label to add
    */
   public static void addLabel(Label label) {
-    labels.add(label);
+    LABELS.add(label);
   }
 
   /**
@@ -27,7 +27,7 @@ public class LabelsManager {
    * @param label The label to remove
    */
   public static void removeLabel(Label label) {
-    labels.remove(label);
+    LABELS.remove(label);
   }
 
   /**
@@ -36,6 +36,6 @@ public class LabelsManager {
    * @return A list of labels
    */
   public static List<Label> getLabels() {
-    return labels;
+    return LABELS;
   }
 }
