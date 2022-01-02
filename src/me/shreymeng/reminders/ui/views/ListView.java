@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -20,7 +21,7 @@ import me.shreymeng.reminders.ui.RemindersListPanel;
 /**
  * The panel displaying reminders as a list.
  */
-public class ListView extends JPanel {
+public class ListView extends JPanel implements IRemindersView {
 
   /**
    * The current sorting method being used.
@@ -41,7 +42,8 @@ public class ListView extends JPanel {
    * Refreshes the tabbed pane so that the displayed reminders are updated, or a new sorting method
    * has been selected.
    */
-  private void refresh() {
+  @Override
+  public void refresh() {
 
     // Remove the current tabbed pane.
     if (currentCategoryTabs != null) {
@@ -55,14 +57,18 @@ public class ListView extends JPanel {
     final JTabbedPane categoryTabs = new JTabbedPane();
 
     // Create the "All" category.
-    categoryTabs.add("All", new RemindersListPanel(reminders, () -> new ReminderEditorFrame(null)));
+    categoryTabs.add("All",
+        new RemindersListPanel(this, reminders, () -> new ReminderEditorFrame(this, null)));
 
     // Create a new tab for each category label.
     LabelsManager.getLabels().stream().filter(Label::isCategory).forEachOrdered(label ->
         categoryTabs.add(label.getName(),
-            new RemindersListPanel(reminders.stream()
+            new RemindersListPanel(this, reminders.stream()
                 .filter(reminder -> reminder.getLabels().contains(label))
-                .collect(Collectors.toList()), () -> new ReminderEditorFrame(null))));
+                .collect(Collectors.toList()), () ->
+                // Open the editor with the current label already selected.
+                new ReminderEditorFrame(this, new Reminder(UUID.randomUUID().toString(),
+                    null, null, -1, null, label)))));
 
     currentCategoryTabs = categoryTabs;
     add(categoryTabs);

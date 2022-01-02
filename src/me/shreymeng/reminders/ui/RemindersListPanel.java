@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import me.shreymeng.reminders.model.Label;
 import me.shreymeng.reminders.model.Reminder;
+import me.shreymeng.reminders.ui.views.IRemindersView;
 import me.shreymeng.reminders.util.Common;
 
 /**
@@ -23,12 +24,20 @@ import me.shreymeng.reminders.util.Common;
 public class RemindersListPanel extends JPanel {
 
   /**
+   * The current reminders view being used, so that it can be refreshed after a reminder has been
+   * edited.
+   */
+  private final IRemindersView view;
+
+  /**
    * Creates a new reminders list.
    *
+   * @param view      The current reminders view being used
    * @param reminders The list of reminders to display
    * @param addAction The action ran when the create button is clicked
    */
-  public RemindersListPanel(List<Reminder> reminders, Runnable addAction) {
+  public RemindersListPanel(IRemindersView view, List<Reminder> reminders, Runnable addAction) {
+    this.view = view;
 
     final JButton addButton = new JButton("+ New Reminder");
     addButton.setPreferredSize(new Dimension(900, 25));
@@ -106,6 +115,7 @@ public class RemindersListPanel extends JPanel {
     final JPanel buttons = new JPanel(new FlowLayout(FlowLayout.LEFT));
     final JButton completeButton = new JButton("✔");
     final JButton editButton = new JButton("Edit");
+    editButton.addActionListener(e -> new ReminderEditorFrame(view, reminder));
 
     buttons.add(completeButton);
     buttons.add(editButton);

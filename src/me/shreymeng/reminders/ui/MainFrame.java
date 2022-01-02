@@ -4,6 +4,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.WindowConstants;
+import me.shreymeng.reminders.Main;
 import me.shreymeng.reminders.ui.views.ListView;
 
 /**
@@ -15,6 +16,7 @@ public class MainFrame {
   public MainFrame() {
 
     final JFrame frame = new JFrame("My Reminders");
+    Main.setMainFrame(frame);
     frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     frame.setResizable(false);
     frame.setSize(1280, 720);

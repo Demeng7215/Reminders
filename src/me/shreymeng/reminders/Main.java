@@ -1,6 +1,7 @@
 package me.shreymeng.reminders;
 
 import java.awt.EventQueue;
+import java.awt.Frame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import me.shreymeng.reminders.ui.TitleFrame;
@@ -9,6 +10,8 @@ import me.shreymeng.reminders.ui.TitleFrame;
 public class Main {
 
   public static final String VERSION = "1.0-2022-01-04";
+
+  private static Frame mainFrame;
 
   public static void main(String[] args) {
 
@@ -25,5 +28,13 @@ public class Main {
 
     // Create and open the title GUI.
     EventQueue.invokeLater(TitleFrame::new);
+  }
+
+  public static Frame getMainFrame() {
+    return mainFrame;
+  }
+
+  public static void setMainFrame(Frame newMainFrame) {
+    mainFrame = newMainFrame;
   }
 }
