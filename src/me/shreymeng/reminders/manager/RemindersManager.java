@@ -15,7 +15,7 @@ import me.shreymeng.reminders.model.SortBy;
 public class RemindersManager {
 
   //TODO Implement GSON file saving/loading.
-  private static final Map<String, Reminder> reminders = new LinkedHashMap<>();
+  private static final Map<String, Reminder> REMINDERS = new LinkedHashMap<>();
 
   /**
    * Registers a new reminder.
@@ -23,7 +23,7 @@ public class RemindersManager {
    * @param reminder The reminder to add
    */
   public static void addReminder(Reminder reminder) {
-    reminders.put(reminder.getId(), reminder);
+    REMINDERS.put(reminder.getId(), reminder);
   }
 
   /**
@@ -32,7 +32,7 @@ public class RemindersManager {
    * @param reminder The reminder to remove
    */
   public static void removeReminder(Reminder reminder) {
-    reminders.remove(reminder.getId());
+    REMINDERS.remove(reminder.getId());
   }
 
   /**
@@ -42,7 +42,7 @@ public class RemindersManager {
    * @return A sorted list of active reminders
    */
   public static List<Reminder> getReminders(SortBy sort) {
-    return sort.sort(new ArrayList<>(reminders.values()));
+    return sort.sort(new ArrayList<>(REMINDERS.values()));
   }
 
   /**
@@ -53,7 +53,7 @@ public class RemindersManager {
    * @return A sorted list of active reminders with the label
    */
   public static List<Reminder> getRemindersByLabel(Label label, SortBy sort) {
-    return sort.sort(reminders.values().stream()
+    return sort.sort(REMINDERS.values().stream()
         .filter(reminder -> reminder.getLabels().contains(label))
         .collect(Collectors.toList()));
   }
