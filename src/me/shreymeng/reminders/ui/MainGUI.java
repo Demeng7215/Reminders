@@ -6,7 +6,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.WindowConstants;
 
 /**
- * The main GUI where all reminders will be displayed.
+ * The main GUI frame, where the user will be able to see their reminders in 2 separate views- list
+ * and calendar.
  */
 public class MainGUI {
 
