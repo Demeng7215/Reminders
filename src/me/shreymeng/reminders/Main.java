@@ -3,7 +3,7 @@ package me.shreymeng.reminders;
 import java.awt.EventQueue;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import me.shreymeng.reminders.ui.TitleGUI;
+import me.shreymeng.reminders.ui.TitleFrame;
 
 //TODO Remove in production.
 public class Main {
@@ -24,6 +24,6 @@ public class Main {
     Test.addTestReminders();
 
     // Create and open the title GUI.
-    EventQueue.invokeLater(TitleGUI::new);
+    EventQueue.invokeLater(TitleFrame::new);
   }
 }

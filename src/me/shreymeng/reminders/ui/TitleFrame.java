@@ -15,9 +15,9 @@ import me.shreymeng.reminders.util.Common;
 /**
  * The splash screen displaying basic project information on startup.
  */
-public class TitleGUI {
+public class TitleFrame {
 
-  public TitleGUI() {
+  public TitleFrame() {
 
     final JFrame frame = new JFrame("Reminders (v" + Main.VERSION + ")");
     frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -65,7 +65,7 @@ public class TitleGUI {
     button.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 24));
     button.setBounds(502, 360, 275, 75);
     button.addActionListener(e -> {
-      new MainGUI();
+      new MainFrame();
       frame.dispose();
     });
     frame.add(button);

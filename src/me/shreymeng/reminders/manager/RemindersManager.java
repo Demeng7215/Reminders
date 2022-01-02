@@ -1,7 +1,9 @@
 package me.shreymeng.reminders.manager;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import me.shreymeng.reminders.model.Label;
 import me.shreymeng.reminders.model.Reminder;
@@ -13,7 +15,7 @@ import me.shreymeng.reminders.model.SortBy;
 public class RemindersManager {
 
   //TODO Implement GSON file saving/loading.
-  private static final List<Reminder> reminders = new ArrayList<>();
+  private static final Map<String, Reminder> reminders = new LinkedHashMap<>();
 
   /**
    * Registers a new reminder.
@@ -21,7 +23,7 @@ public class RemindersManager {
    * @param reminder The reminder to add
    */
   public static void addReminder(Reminder reminder) {
-    reminders.add(reminder);
+    reminders.put(reminder.getId(), reminder);
   }
 
   /**
@@ -30,7 +32,7 @@ public class RemindersManager {
    * @param reminder The reminder to remove
    */
   public static void removeReminder(Reminder reminder) {
-    reminders.remove(reminder);
+    reminders.remove(reminder.getId());
   }
 
   /**
@@ -40,7 +42,7 @@ public class RemindersManager {
    * @return A sorted list of active reminders
    */
   public static List<Reminder> getReminders(SortBy sort) {
-    return sort.sort(reminders);
+    return sort.sort(new ArrayList<>(reminders.values()));
   }
 
   /**
@@ -51,7 +53,7 @@ public class RemindersManager {
    * @return A sorted list of active reminders with the label
    */
   public static List<Reminder> getRemindersByLabel(Label label, SortBy sort) {
-    return sort.sort(reminders.stream()
+    return sort.sort(reminders.values().stream()
         .filter(reminder -> reminder.getLabels().contains(label))
         .collect(Collectors.toList()));
   }
