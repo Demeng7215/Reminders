@@ -162,13 +162,27 @@ public class ReminderEditorFrame {
         return;
       }
 
-      RemindersManager.addReminder(new Reminder(
-          current == null ? UUID.randomUUID().toString() : current.getId(),
-          titleField.getText(),
-          descriptionField.getText(),
-          dueDatePanel.getSelected().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli(),
-          Priority.values()[priorityDropdown.getSelectedIndex()],
-          selectedLabels.toArray(new Label[0])));
+      final long dueDate = dueDatePanel.getSelected().atZone(ZoneId.systemDefault()).toInstant()
+          .toEpochMilli();
+
+      if (current != null) {
+        current.setTask(titleField.getText());
+        current.setDescription(descriptionField.getText());
+        current.setDueDate(dueDate);
+        current.setPriority(Priority.values()[priorityDropdown.getSelectedIndex()]);
+        current.getLabels().clear();
+        current.getLabels().addAll(selectedLabels);
+
+      } else {
+        RemindersManager.addReminder(new Reminder(
+            UUID.randomUUID().toString(),
+            titleField.getText(),
+            descriptionField.getText(),
+            dueDate,
+            Priority.values()[priorityDropdown.getSelectedIndex()],
+            selectedLabels.toArray(new Label[0])));
+      }
+
       view.refresh();
       dialog.dispose();
     });
