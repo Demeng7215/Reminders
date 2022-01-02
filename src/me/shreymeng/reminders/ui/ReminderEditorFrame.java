@@ -25,6 +25,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -39,6 +40,7 @@ import me.shreymeng.reminders.manager.RemindersManager;
 import me.shreymeng.reminders.model.Label;
 import me.shreymeng.reminders.model.Priority;
 import me.shreymeng.reminders.model.Reminder;
+import me.shreymeng.reminders.model.SortBy;
 import me.shreymeng.reminders.ui.views.IRemindersView;
 
 /**
@@ -47,12 +49,18 @@ import me.shreymeng.reminders.ui.views.IRemindersView;
 public class ReminderEditorFrame {
 
   /**
+   * The current reminders view being used.
+   */
+  private final IRemindersView view;
+
+  /**
    * Creates a new Reminder editor or creator.
    *
-   * @param view    The current reminders view
+   * @param view    The current reminders view being used
    * @param current The current reminder that is being edited, or null if this is a new reminder
    */
   public ReminderEditorFrame(IRemindersView view, Reminder current) {
+    this.view = view;
 
     // Use a modal dialog instead of normal JFrame to disable interactions in other frames.
     final JDialog dialog = new JDialog(
@@ -299,11 +307,25 @@ public class ReminderEditorFrame {
       final JPanel panel = new JPanel();
       panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
+      final JButton createButton = new JButton("+ Create Label");
+      createButton.addActionListener(e ->
+          new LabelCreateFrame(dialog, () -> {
+            dialog.dispose();
+            new LabelFrame(mainDialog, alreadySelected, consumer);
+            view.refresh();
+          }));
+
       // Associate each label with a checkbox.
       final Map<Label, JCheckBox> checkBoxes = new LinkedHashMap<>();
 
       // Add a checkbox for each label.
       for (Label label : LabelsManager.getLabels()) {
+
+        final JPanel labelPanel = new JPanel();
+        labelPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        labelPanel.setMinimumSize(new Dimension(300, 30));
+        labelPanel.setMaximumSize(new Dimension(300, 30));
+
         final JCheckBox checkBox = new JCheckBox("❚ " + label.getName());
         checkBox.setForeground(label.getColor());
 
@@ -312,7 +334,35 @@ public class ReminderEditorFrame {
         }
 
         checkBoxes.put(label, checkBox);
-        panel.add(checkBox);
+
+        final JButton deleteButton = new JButton("x");
+        deleteButton.setPreferredSize(new Dimension(38, 18));
+        deleteButton.addActionListener(e -> {
+
+          //TODO Confirmation menu for deleting label.
+
+          // Remove the label from all reminders.
+          for (Reminder reminder : RemindersManager.getReminders(SortBy.DUE_DATE)) {
+            reminder.getLabels().removeIf(l -> l.getName().equals(label.getName()));
+          }
+
+          // Remove label from registry.
+          LabelsManager.removeLabel(label);
+
+          // Remove label from already selected list.
+          alreadySelected.removeIf(l -> l.getName().equals(label.getName()));
+
+          view.refresh();
+
+          // Reopen this dialog.
+          dialog.dispose();
+          new LabelFrame(mainDialog, alreadySelected, consumer);
+        });
+
+        labelPanel.add(checkBox);
+        labelPanel.add(deleteButton);
+
+        panel.add(labelPanel);
       }
 
       // Put labels in a scroll pane for large amounts of labels.
@@ -332,8 +382,84 @@ public class ReminderEditorFrame {
             .collect(Collectors.toList()));
       });
 
+      dialog.add(createButton, BorderLayout.PAGE_START);
       dialog.add(scrollPane);
       dialog.add(okButton, BorderLayout.PAGE_END);
+      dialog.setVisible(true);
+    }
+  }
+
+  /**
+   * The frame for creating a new label.
+   */
+  private class LabelCreateFrame {
+
+    /**
+     * Creates a new label creation frame.
+     *
+     * @param selectDialog The parent dialog
+     * @param refreshTask  The task to run to refresh the labels
+     */
+    public LabelCreateFrame(JDialog selectDialog, Runnable refreshTask) {
+
+      final JDialog dialog = new JDialog(selectDialog, "Create Label", true);
+      dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+      dialog.setResizable(false);
+      dialog.setSize(500, 500);
+      dialog.setLocationRelativeTo(null);
+
+      final JPanel panel = new JPanel();
+      panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+      final JLabel nameLabel = new JLabel("Name");
+      final JTextField nameField = new JTextField();
+      nameLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+      nameField.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+      final JCheckBox categoryCheckBox = new JCheckBox("Create a separate tab for this label");
+      categoryCheckBox.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+      final JLabel colorLabel = new JLabel("Color");
+      final JColorChooser colorSelector = new JColorChooser(Color.BLACK);
+      colorLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+      colorSelector.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+      panel.add(nameLabel);
+      panel.add(nameField);
+      panel.add(Box.createRigidArea(new Dimension(0, 10)));
+      panel.add(categoryCheckBox);
+      panel.add(Box.createRigidArea(new Dimension(0, 10)));
+      panel.add(colorLabel);
+      panel.add(colorSelector);
+      panel.add(Box.createRigidArea(new Dimension(0, 10)));
+      panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+      final JButton createButton = new JButton("Create");
+      createButton.addActionListener(e -> {
+
+        final String name = nameField.getText();
+
+        if (name.isBlank()) {
+          JOptionPane.showMessageDialog(null, "Label name cannot be empty!");
+          return;
+        }
+
+        if (LabelsManager.getLabels().stream().anyMatch(l -> l.getName().equalsIgnoreCase(name))) {
+          JOptionPane.showMessageDialog(null, "This label already exists!");
+          return;
+        }
+
+        LabelsManager.addLabel(new Label(
+            name,
+            colorSelector.getColor(),
+            categoryCheckBox.isSelected()));
+
+        dialog.dispose();
+        refreshTask.run();
+      });
+
+      dialog.add(panel);
+      dialog.add(createButton, BorderLayout.PAGE_END);
       dialog.setVisible(true);
     }
   }
