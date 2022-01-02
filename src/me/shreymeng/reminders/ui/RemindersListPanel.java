@@ -13,7 +13,6 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import me.shreymeng.reminders.manager.LabelsManager;
 import me.shreymeng.reminders.model.Label;
 import me.shreymeng.reminders.model.Reminder;
 import me.shreymeng.reminders.util.Common;
@@ -90,7 +89,7 @@ public class RemindersListPanel extends JPanel {
     final JPanel footer = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
 
     // All of the reminder's labels.
-    for (Label label : LabelsManager.getLabels()) {
+    for (Label label : reminder.getLabels()) {
       final JLabel labelLabel = new JLabel("❚ " + label.getName() + "  ");
       labelLabel.setForeground(label.getColor());
       labelLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 14));
