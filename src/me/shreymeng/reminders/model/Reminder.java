@@ -1,7 +1,7 @@
 package me.shreymeng.reminders.model;
 
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 import me.shreymeng.reminders.util.Common;
@@ -35,7 +35,7 @@ public class Reminder {
   /**
    * All labels belonging to the task.
    */
-  private final Set<Label> labels = new HashSet<>();
+  private final Set<Label> labels = new LinkedHashSet<>();
 
   /**
    * Creates a new reminder object.
@@ -103,6 +103,10 @@ public class Reminder {
 
   public void removeLabel(Label label) {
     this.labels.remove(label);
+  }
+
+  public Reminder copy() {
+    return new Reminder(id, task, description, dueDate, priority, labels.toArray(new Label[0]));
   }
 
   @Override
