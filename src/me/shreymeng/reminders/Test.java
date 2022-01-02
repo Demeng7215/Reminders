@@ -23,9 +23,9 @@ public class Test {
 
   public static void addTestReminders() {
 
-    final Label label1 = new Label("Label 1", Color.BLUE, true);
-    final Label label2 = new Label("Label 2", Color.ORANGE, false);
-    final Label label3 = new Label("Label 3", Color.GRAY, false);
+    final Label label1 = new Label("Label 1", Color.decode("#5b14ff"), true);
+    final Label label2 = new Label("Label 2", Color.decode("#ff3300"), false);
+    final Label label3 = new Label("Label 3", Color.decode("#0b6b00"), false);
 
     LabelsManager.addLabel(label1);
     LabelsManager.addLabel(label2);
