@@ -392,7 +392,7 @@ public class ReminderEditorFrame {
   /**
    * The frame for creating a new label.
    */
-  private class LabelCreateFrame {
+  private static class LabelCreateFrame {
 
     /**
      * Creates a new label creation frame.
