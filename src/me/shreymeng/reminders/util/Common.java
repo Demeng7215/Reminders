@@ -35,22 +35,22 @@ public class Common {
    */
   public static String formatDateTime(long dateTime) {
 
-    final String formatted;
+    final String FORMATTED;
 
-    final LocalDateTime localDate = new Date(dateTime)
+    final LocalDateTime LOCAL_DATE = new Date(dateTime)
         .toInstant()
         .atZone(ZoneId.systemDefault())
         .toLocalDateTime();
 
-    final boolean includeTime = !(localDate.getHour() == 0 && localDate.getMinute() == 0);
+    final boolean INCLUDE_TIME = !(LOCAL_DATE.getHour() == 0 && LOCAL_DATE.getMinute() == 0);
 
-    if (localDate.getYear() == LocalDate.now().getYear()) {
-      formatted = localDate.format(includeTime ? DATE_TIME_NO_YEAR_FORMAT : DATE_NO_YEAR_FORMAT);
+    if (LOCAL_DATE.getYear() == LOCAL_DATE.now().getYear()) {
+      FORMATTED = LOCAL_DATE.format(INCLUDE_TIME ? DATE_TIME_NO_YEAR_FORMAT : DATE_NO_YEAR_FORMAT);
     } else {
-      formatted = localDate.format(includeTime ? DATE_TIME_FORMAT : DATE_FORMAT);
+      FORMATTED = LOCAL_DATE.format(INCLUDE_TIME ? DATE_TIME_FORMAT : DATE_FORMAT);
     }
 
-    return formatted.replace(".", "");
+    return FORMATTED.replace(".", "");
   }
 
   /**
