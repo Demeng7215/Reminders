@@ -14,7 +14,7 @@ public class Reminder {
   /**
    * The randomly generated ID of the reminder, used for identification.
    */
-  private final String ID;
+  private final String id;
 
   /**
    * The reminder task.
@@ -35,7 +35,7 @@ public class Reminder {
   /**
    * All labels belonging to the task.
    */
-  private final Set<Label> LABELS = new LinkedHashSet<>();
+  private final Set<Label> labels = new LinkedHashSet<>();
 
   /**
    * Creates a new reminder object.
@@ -49,16 +49,16 @@ public class Reminder {
    */
   public Reminder(String id, String task, String description, long dueDate, Priority priority,
       Label... labels) {
-    this.ID = id;
+    this.id = id;
     this.task = task;
     this.description = description;
     this.dueDate = dueDate;
     this.priority = priority;
-    this.LABELS.addAll(Arrays.asList(labels));
+    this.labels.addAll(Arrays.asList(labels));
   }
 
   public String getId() {
-    return ID;
+    return id;
   }
 
   public String getTask() {
@@ -94,29 +94,29 @@ public class Reminder {
   }
 
   public Set<Label> getLabels() {
-    return LABELS;
+    return labels;
   }
 
   public void addLabel(Label label) {
-    this.LABELS.add(label);
+    this.labels.add(label);
   }
 
   public void removeLabel(Label label) {
-    this.LABELS.remove(label);
+    this.labels.remove(label);
   }
 
   public Reminder copy() {
-    return new Reminder(ID, task, description, dueDate, priority, LABELS.toArray(new Label[0]));
+    return new Reminder(id, task, description, dueDate, priority, labels.toArray(new Label[0]));
   }
 
   @Override
   public String toString() {
     return "Reminder{" +
-        "id=" + ID +
+        "id=" + id +
         ", task='" + task + '\'' +
         ", description='" + description + '\'' +
         ", dueDate=" + Common.formatDateTime(dueDate) +
-        ", labels=" + LABELS +
+        ", labels=" + labels +
         ", priority=" + priority +
         '}';
   }

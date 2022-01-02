@@ -21,8 +21,8 @@ public enum SortBy {
    */
   PRIORITY("Priority", new PrioritySort());
 
-  private final String NAME;
-  private final SortingMethod METHOD;
+  private final String name;
+  private final SortingMethod method;
 
   /**
    * Creates a new sorting method.
@@ -31,13 +31,13 @@ public enum SortBy {
    * @param method The sorting handler for this method
    */
   SortBy(String name, SortingMethod method) {
-    this.NAME = name;
-    this.METHOD = method;
+    this.name = name;
+    this.method = method;
   }
 
   @Override
   public String toString() {
-    return NAME;
+    return name;
   }
 
   /**
@@ -47,7 +47,7 @@ public enum SortBy {
    * @return The sorted list of reminders
    */
   public List<Reminder> sort(List<Reminder> unsorted) {
-    return METHOD.sort(unsorted);
+    return method.sort(unsorted);
   }
 
   /**
@@ -71,10 +71,10 @@ public enum SortBy {
 
     @Override
     public List<Reminder> sort(List<Reminder> unsorted) {
-      final List<Reminder> REMINDERS = new ArrayList<>(unsorted);
+      final List<Reminder> reminders = new ArrayList<>(unsorted);
       // Sort by checking which reminder has a "smaller" due date.
-      REMINDERS.sort((o1, o2) -> (int) (o1.getDueDate() - o2.getDueDate()));
-      return REMINDERS;
+      reminders.sort((o1, o2) -> (int) (o1.getDueDate() - o2.getDueDate()));
+      return reminders;
     }
   }
 
@@ -86,26 +86,26 @@ public enum SortBy {
     @Override
     public List<Reminder> sort(List<Reminder> unsorted) {
 
-      final List<Reminder> REMINDERS = new ArrayList<>();
-      final Map<Priority, List<Reminder>> PRIORITY_MAP = new EnumMap<>(Priority.class);
+      final List<Reminder> reminders = new ArrayList<>();
+      final Map<Priority, List<Reminder>> priorityMap = new EnumMap<>(Priority.class);
 
       // Split the list into multiple sub-lists based on its priority.
       for (Priority priority : Priority.values()) {
-        PRIORITY_MAP.put(priority, unsorted.stream()
+        priorityMap.put(priority, unsorted.stream()
             .filter(reminder -> reminder.getPriority() == priority)
             .collect(Collectors.toList()));
       }
 
       // Collect and reverse the prioritized reminders so the highest priorities are listed first.
-      final List<List<Reminder>> PRIORITIZED_REMINDERS = new ArrayList<>(PRIORITY_MAP.values());
-      Collections.reverse(PRIORITIZED_REMINDERS);
+      final List<List<Reminder>> prioritizedReminders = new ArrayList<>(priorityMap.values());
+      Collections.reverse(prioritizedReminders);
 
       // Sort all priority sub-lists by due date.
-      for (List<Reminder> list : PRIORITIZED_REMINDERS) {
-        REMINDERS.addAll(DUE_DATE.sort(list));
+      for (List<Reminder> list : prioritizedReminders) {
+        reminders.addAll(DUE_DATE.sort(list));
       }
 
-      return REMINDERS;
+      return reminders;
     }
   }
 }
