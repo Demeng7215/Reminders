@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import me.shreymeng.reminders.manager.RemindersManager;
 import me.shreymeng.reminders.model.Label;
 import me.shreymeng.reminders.model.Reminder;
 import me.shreymeng.reminders.ui.views.IRemindersView;
@@ -113,7 +114,13 @@ public class RemindersListPanel extends JPanel {
 
     // Buttons for interacting with the reminder.
     final JPanel buttons = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
     final JButton completeButton = new JButton("✔");
+    completeButton.addActionListener(e -> {
+      RemindersManager.removeReminder(reminder);
+      view.refresh();
+    });
+
     final JButton editButton = new JButton("Edit");
     editButton.addActionListener(e -> new ReminderEditorFrame(view, reminder));
 
