@@ -11,20 +11,20 @@ public enum Priority {
   HIGH("• High Priority", Color.decode("#ff2e2e")),
   VERY_HIGH("• Very High Priority", Color.decode("#870000"));
 
-  private final String name;
-  private final Color color;
+  private final String NAME;
+  private final Color COLOR;
 
   Priority(String name, Color color) {
-    this.name = name;
-    this.color = color;
+    this.NAME = name;
+    this.COLOR = color;
   }
 
   @Override
   public String toString() {
-    return name;
+    return NAME;
   }
 
   public Color getColor() {
-    return color;
+    return COLOR;
   }
 }
