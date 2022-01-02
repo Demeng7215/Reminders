@@ -309,7 +309,7 @@ public class ReminderEditorFrame {
 
       final JButton createButton = new JButton("+ Create Label");
       createButton.addActionListener(e ->
-          new LabelCreateFrame(dialog, () -> {
+          new LabelEditorFrame(null, dialog, () -> {
             dialog.dispose();
             new LabelFrame(mainDialog, alreadySelected, consumer);
             view.refresh();
@@ -334,6 +334,15 @@ public class ReminderEditorFrame {
         }
 
         checkBoxes.put(label, checkBox);
+
+        final JButton editButton = new JButton("Edit");
+        editButton.setPreferredSize(new Dimension(60, 18));
+        editButton.addActionListener(e ->
+            new LabelEditorFrame(label, dialog, () -> {
+              dialog.dispose();
+              new LabelFrame(mainDialog, alreadySelected, consumer);
+              view.refresh();
+            }));
 
         final JButton deleteButton = new JButton("x");
         deleteButton.setPreferredSize(new Dimension(38, 18));
@@ -360,6 +369,7 @@ public class ReminderEditorFrame {
         });
 
         labelPanel.add(checkBox);
+        labelPanel.add(editButton);
         labelPanel.add(deleteButton);
 
         panel.add(labelPanel);
@@ -390,19 +400,21 @@ public class ReminderEditorFrame {
   }
 
   /**
-   * The frame for creating a new label.
+   * The frame for creating or editing a label.
    */
-  private static class LabelCreateFrame {
+  private static class LabelEditorFrame {
 
     /**
-     * Creates a new label creation frame.
+     * Creates a new label editor frame.
      *
+     * @param existing     The existing label, if editing
      * @param selectDialog The parent dialog
      * @param refreshTask  The task to run to refresh the labels
      */
-    public LabelCreateFrame(JDialog selectDialog, Runnable refreshTask) {
+    public LabelEditorFrame(Label existing, JDialog selectDialog, Runnable refreshTask) {
 
-      final JDialog dialog = new JDialog(selectDialog, "Create Label", true);
+      final JDialog dialog = new JDialog(
+          selectDialog, existing == null ? "Create Label" : "Edit Label", true);
       dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
       dialog.setResizable(false);
       dialog.setSize(500, 500);
@@ -420,9 +432,15 @@ public class ReminderEditorFrame {
       categoryCheckBox.setAlignmentX(Component.LEFT_ALIGNMENT);
 
       final JLabel colorLabel = new JLabel("Color");
-      final JColorChooser colorSelector = new JColorChooser(Color.BLACK);
+      final JColorChooser colorSelector = new JColorChooser(
+          existing == null ? Color.BLACK : existing.getColor());
       colorLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
       colorSelector.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+      if (existing != null) {
+        nameField.setText(existing.getName());
+        categoryCheckBox.setSelected(existing.isCategory());
+      }
 
       panel.add(nameLabel);
       panel.add(nameField);
@@ -444,15 +462,25 @@ public class ReminderEditorFrame {
           return;
         }
 
-        if (LabelsManager.getLabels().stream().anyMatch(l -> l.getName().equalsIgnoreCase(name))) {
-          JOptionPane.showMessageDialog(null, "This label already exists!");
-          return;
-        }
+        if (existing == null) {
+          // Create a new label.
+          if (LabelsManager.getLabels().stream()
+              .anyMatch(l -> l.getName().equalsIgnoreCase(name))) {
+            JOptionPane.showMessageDialog(null, "This label already exists!");
+            return;
+          }
 
-        LabelsManager.addLabel(new Label(
-            name,
-            colorSelector.getColor(),
-            categoryCheckBox.isSelected()));
+          LabelsManager.addLabel(new Label(
+              name,
+              colorSelector.getColor(),
+              categoryCheckBox.isSelected()));
+
+        } else {
+          // Edit the existing label.
+          existing.setName(name);
+          existing.setColor(colorSelector.getColor());
+          existing.setCategory(categoryCheckBox.isSelected());
+        }
 
         dialog.dispose();
         refreshTask.run();
