@@ -65,7 +65,7 @@ public class ReminderEditorFrame {
     final JComboBox<String> priorityDropdown = new JComboBox<>(
         Arrays.stream(Priority.values()).map(Priority::toString).toArray(String[]::new));
     priorityDropdown.setMaximumSize(new Dimension(550, 24));
-    priorityDropdown.setSelectedItem(2);
+    priorityDropdown.setSelectedIndex(1);
     priorityLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
     priorityDropdown.setAlignmentX(Component.LEFT_ALIGNMENT);
 
@@ -116,21 +116,27 @@ public class ReminderEditorFrame {
     public DueDatePanel() {
       setLayout(new FlowLayout(FlowLayout.LEFT, 2, 0));
 
-      final LocalDateTime date = LocalDateTime.now(ZoneId.systemDefault());
-      final YearMonth yearMonth = YearMonth.of(date.getYear(), date.getMonthValue());
+      // The current date and time.
+      final LocalDateTime now = LocalDateTime.now(ZoneId.systemDefault());
+      // The number of days in the current month.
+      final int daysInMonth = YearMonth.of(now.getYear(), now.getMonthValue()).lengthOfMonth();
 
       this.dayDropdown = new JComboBox<>(
-          IntStream.range(1, yearMonth.lengthOfMonth() + 1).boxed().toArray(Integer[]::new));
-      dayDropdown.setSelectedItem(date.getDayOfMonth());
+          IntStream.range(1, daysInMonth + 1).boxed().toArray(Integer[]::new));
+      dayDropdown.setSelectedItem(now.getDayOfMonth());
       dayDropdown.setPreferredSize(new Dimension(40, 24));
 
       this.yearDropdown = new JComboBox<>(
-          IntStream.range(date.getYear(), date.getYear() + 11).boxed().toArray(Integer[]::new));
+          IntStream.range(now.getYear(), now.getYear() + 11).boxed().toArray(Integer[]::new));
       yearDropdown.setSelectedItem(0);
+      yearDropdown.setPreferredSize(new Dimension(60, 24));
 
       this.monthDropdown = new JComboBox<>(Month.values());
-      monthDropdown.setSelectedItem(date.getMonth());
+      monthDropdown.setSelectedItem(now.getMonth());
+      monthDropdown.setPreferredSize(new Dimension(100, 24));
       monthDropdown.addActionListener(e -> {
+        // Update daysDropdown to prevent selecting days greater than number of days in the month.
+
         final Integer selectedYear = (Integer) yearDropdown.getSelectedItem();
         final Month selectedMonth = (Month) monthDropdown.getSelectedItem();
 
@@ -153,11 +159,13 @@ public class ReminderEditorFrame {
 
       this.hourDropdown = new JComboBox<>(
           IntStream.range(0, 24).boxed().map(i -> String.format("%02d", i)).toArray(String[]::new));
-      dayDropdown.setSelectedIndex(0);
+      hourDropdown.setSelectedIndex(0);
+      hourDropdown.setPreferredSize(new Dimension(40, 24));
 
       this.minuteDropdown = new JComboBox<>(
           IntStream.range(0, 60).boxed().map(i -> String.format("%02d", i)).toArray(String[]::new));
       minuteDropdown.setSelectedIndex(0);
+      minuteDropdown.setPreferredSize(new Dimension(40, 24));
 
       add(monthDropdown);
       add(dayDropdown);
