@@ -36,7 +36,7 @@ public class TitleFrame {
     final JLabel description = new JLabel(
         "Keeping track of everything you need to get done.", SwingConstants.CENTER);
     description.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
-    description.setBounds(290, 280, 700, 30);
+    description.setBounds(290, 295, 700, 30);
     frame.add(description);
 
     // Authors, course, and teacher information.
