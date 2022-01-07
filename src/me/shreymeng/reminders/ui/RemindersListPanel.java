@@ -100,7 +100,7 @@ public class RemindersListPanel extends JPanel {
 
     // All of the reminder's labels.
     for (Label label : reminder.getLabels()) {
-      final JLabel labelLabel = new JLabel("❚ " + label.getName() + "  ");
+      final JLabel labelLabel = new JLabel("| " + label.getName() + "  ");
       labelLabel.setForeground(label.getColor());
       labelLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 14));
       footer.add(labelLabel);

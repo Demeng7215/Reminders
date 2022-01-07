@@ -340,7 +340,7 @@ public class ReminderEditorFrame {
         labelPanel.setMinimumSize(new Dimension(300, 30));
         labelPanel.setMaximumSize(new Dimension(300, 30));
 
-        final JCheckBox checkBox = new JCheckBox("❚ " + label.getName());
+        final JCheckBox checkBox = new JCheckBox("| " + label.getName());
         checkBox.setForeground(label.getColor());
 
         if (alreadySelected.contains(label)) {
