@@ -165,6 +165,8 @@ public class ReminderEditorFrame {
       final long dueDate = dueDatePanel.getSelected().atZone(ZoneId.systemDefault()).toInstant()
           .toEpochMilli();
 
+      final Reminder updatedReminder;
+
       if (current != null) {
         current.setTask(titleField.getText());
         current.setDescription(descriptionField.getText());
@@ -172,16 +174,19 @@ public class ReminderEditorFrame {
         current.setPriority(Priority.values()[priorityDropdown.getSelectedIndex()]);
         current.getLabels().clear();
         current.getLabels().addAll(selectedLabels);
+        updatedReminder = current;
 
       } else {
-        RemindersManager.addReminder(new Reminder(
+        updatedReminder = new Reminder(
             UUID.randomUUID().toString(),
             titleField.getText(),
             descriptionField.getText(),
             dueDate,
             Priority.values()[priorityDropdown.getSelectedIndex()],
-            selectedLabels.toArray(new Label[0])));
+            selectedLabels.toArray(new Label[0]));
       }
+
+      RemindersManager.addReminder(updatedReminder);
 
       view.refresh();
       dialog.dispose();
