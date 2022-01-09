@@ -8,7 +8,7 @@ import me.shreymeng.reminders.ui.TitleFrame;
 
 public class Main {
 
-  public static final String VERSION = "1.0-2022-01-04";
+  public static final String VERSION = "2.0-2022-01-17";
 
   private static Frame mainFrame;
 

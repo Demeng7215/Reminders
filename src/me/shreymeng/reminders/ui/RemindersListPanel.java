@@ -31,6 +31,11 @@ public class RemindersListPanel extends JPanel {
   private final IRemindersView view;
 
   /**
+   * The scroll pane containing the list of reminders.
+   */
+  private final JScrollPane scrollPane;
+
+  /**
    * Creates a new reminders list.
    *
    * @param view      The current reminders view being used
@@ -53,7 +58,7 @@ public class RemindersListPanel extends JPanel {
     }
 
     // Make the panel scrollable for large amounts of reminders.
-    final JScrollPane scrollPane = new JScrollPane(panel);
+    this.scrollPane = new JScrollPane(panel);
     scrollPane.setPreferredSize(new Dimension(1100, 550));
     // Change sensitivity.
     scrollPane.getVerticalScrollBar().setUnitIncrement(16);
@@ -137,5 +142,9 @@ public class RemindersListPanel extends JPanel {
     panel.add(buttons);
 
     return panel;
+  }
+
+  public JScrollPane getScrollPane() {
+    return scrollPane;
   }
 }

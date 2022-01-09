@@ -2,6 +2,7 @@ package me.shreymeng.reminders.ui.views;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.Point;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -45,10 +46,18 @@ public class ListView extends JPanel implements IRemindersView {
   @Override
   public void refresh() {
 
-    //TODO Bring user back to original tab and scroll position.
+    // The name of the currently selected tab.
+    String selectedName = "All";
+    // The vertical scroll position of the list panel of the selected tab.
+    int selectedScroll = 0;
 
     // Remove the current tabbed pane.
     if (currentCategoryTabs != null) {
+      final int selectedIndex = currentCategoryTabs.getSelectedIndex();
+      selectedName = currentCategoryTabs.getTitleAt(selectedIndex);
+      selectedScroll = ((RemindersListPanel) currentCategoryTabs.getComponentAt(selectedIndex))
+          .getScrollPane().getViewport().getViewPosition().y;
+
       remove(currentCategoryTabs);
       revalidate();
       repaint();
@@ -65,12 +74,28 @@ public class ListView extends JPanel implements IRemindersView {
     // Create a new tab for each category label.
     LabelsManager.getLabels().stream().filter(Label::isCategory).forEachOrdered(label ->
         categoryTabs.add(label.getName(),
+            // Create a list panel with only reminders containing the label.
             new RemindersListPanel(this, reminders.stream()
                 .filter(reminder -> reminder.getLabels().contains(label))
                 .collect(Collectors.toList()), () ->
                 // Open the editor with the current label already selected.
                 new ReminderEditorFrame(this, new Reminder(UUID.randomUUID().toString(),
                     null, null, -1, null, label)))));
+
+    // Attempt to return to a view similar to their previous one.
+    for (int i = 0; i < categoryTabs.getTabCount(); i++) {
+      // Check if the tab name is the same as the previously selected tab.
+      if (categoryTabs.getTitleAt(i).equalsIgnoreCase(selectedName)) {
+
+        // Go to the tab.
+        categoryTabs.setSelectedIndex(i);
+
+        // Go to the previous view position.
+        ((RemindersListPanel) categoryTabs.getComponentAt(i))
+            .getScrollPane().getViewport().setViewPosition(new Point(0, selectedScroll));
+        break;
+      }
+    }
 
     currentCategoryTabs = categoryTabs;
     add(categoryTabs);
