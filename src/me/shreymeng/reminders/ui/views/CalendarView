@@ -1,4 +1,4 @@
-package reminders.ui.views;
+package me.shreymeng.reminders.ui.views;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -20,10 +20,10 @@ import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import reminders.model.Reminder;
-import reminders.model.SortBy;
-import reminders.util.Common;
-import reminders.manager.RemindersManager;
+import me.shreymeng.reminders.model.Reminder;
+import me.shreymang.reminders.model.SortBy;
+import me.shreymeng.reminders.util.Common;
+import me.shreymeng.reminders.manager.RemindersManager;
 
 public class CalendarView extends JPanel{
 	static JLabel header;
