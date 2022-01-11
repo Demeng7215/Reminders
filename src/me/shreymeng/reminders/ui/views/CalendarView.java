@@ -3,20 +3,37 @@ package me.shreymeng.reminders.ui.views;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Calendar;
+import java.util.EventObject;
 import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.CellEditorListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
+import me.shreymeng.reminders.Main;
+import me.shreymeng.reminders.manager.RemindersManager;
+import me.shreymeng.reminders.model.Reminder;
+import me.shreymeng.reminders.model.SortBy;
+import me.shreymeng.reminders.ui.ReminderEditorFrame;
+import me.shreymeng.reminders.ui.RemindersListPanel;
 
 public class CalendarView extends JPanel implements IRemindersView {
 
@@ -105,13 +122,7 @@ public class CalendarView extends JPanel implements IRemindersView {
     header.add(headerLabel, BorderLayout.CENTER);
     header.add(nextButton, BorderLayout.LINE_END);
 
-    this.tableModel = new DefaultTableModel() {
-      @Override
-      public boolean isCellEditable(int rowInd, int colInd) {
-        // Disable all cells from being edited.
-        return false;
-      }
-    };
+    this.tableModel = new DefaultTableModel();
 
     // Create a new table with our custom model.
     this.table = new JTable(tableModel);
@@ -166,12 +177,29 @@ public class CalendarView extends JPanel implements IRemindersView {
 
     // Apply the custom renderer.
     table.setDefaultRenderer(table.getColumnClass(0), new CalendarRenderer());
+    table.setDefaultEditor(table.getColumnClass(0), new CalendarEditor());
+  }
+
+  private List<Reminder> getRemindersFromDay(int targetYear, int targetMonth, int targetDay) {
+
+    LocalDate targetDate = LocalDate.of(targetYear, targetMonth, targetDay);
+    // The start of the day (12am).
+    long min = targetDate.atStartOfDay(ZoneId.systemDefault())
+        .toInstant().toEpochMilli();
+    // The end of the day (11:59pm).
+    long max = targetDate.atTime(23, 59).atZone(ZoneId.systemDefault())
+        .toInstant().toEpochMilli();
+
+    // Collect all reminders with a due date between the start and end of the day.
+    return RemindersManager.getReminders(SortBy.DUE_DATE).stream()
+        .filter(reminder -> reminder.getDueDate() >= min && reminder.getDueDate() <= max)
+        .collect(Collectors.toList());
   }
 
   /**
    * The custom table cell renderer to change the display of table cells.
    */
-  private static class CalendarRenderer extends DefaultTableCellRenderer {
+  private class CalendarRenderer extends DefaultTableCellRenderer {
 
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
@@ -184,11 +212,162 @@ public class CalendarView extends JPanel implements IRemindersView {
       if (value == null) {
         // The "day" is outside the current month.
         setBackground(Color.LIGHT_GRAY);
-      } else {
-        setBackground(Color.WHITE);
+        return this;
       }
 
-      return this;
+      JPanel panel = new JPanel(new BorderLayout(0, 0));
+
+      int day = Integer.parseInt(((String) value).trim());
+
+      // The label displaying the current day.
+      JLabel dayLabel = new JLabel("" + day);
+      dayLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 11));
+
+      // The panel containing all tasks for the day.
+      JPanel tasksPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+
+      // Collect all reminders with a due date between the start and end of the day.
+      List<Reminder> reminders = getRemindersFromDay(year, month + 1, day);
+
+      // Add a label for each reminder. Maximum of 3 (others won't fit).
+      reminders.stream().limit(3)
+          .forEachOrdered(reminder -> tasksPanel.add(reminderLabel(reminder)));
+
+      // Add a note saying there are more reminders if the number exceeds 3.
+      if (reminders.size() > 3) {
+        JLabel moreLabel = new JLabel("...and " + (reminders.size() - 3) + " more");
+        moreLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 14));
+        moreLabel.setPreferredSize(new Dimension(165, 18));
+        moreLabel.setForeground(Color.DARK_GRAY);
+        tasksPanel.add(moreLabel);
+      }
+
+      panel.add(dayLabel, BorderLayout.PAGE_START);
+      panel.add(tasksPanel, BorderLayout.CENTER);
+      return panel;
+    }
+
+    /**
+     * Creates a JLabel for the given reminder.
+     *
+     * @param reminder The reminder to create a label for
+     * @return The label for the reminder
+     */
+    private JLabel reminderLabel(Reminder reminder) {
+      JLabel label = new JLabel("- " + reminder.getTask());
+      label.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 14));
+      label.setPreferredSize(new Dimension(165, 18));
+      label.setForeground(reminder.getPriority().getColor());
+      return label;
+    }
+  }
+
+  /**
+   * The custom table cell editor to change the action on click.
+   */
+  private class CalendarEditor implements TableCellEditor {
+
+    @Override
+    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected,
+        int row, int column) {
+
+      if (value == null) {
+        return null;
+      }
+
+      // Open a custom "cell editor" instead of Java's default.
+      new DayView(Integer.parseInt(((String) value).trim()));
+      return null;
+    }
+
+    @Override
+    public Object getCellEditorValue() {
+      return "";
+    }
+
+    @Override
+    public boolean isCellEditable(EventObject anEvent) {
+      return true;
+    }
+
+    @Override
+    public boolean shouldSelectCell(EventObject anEvent) {
+      return false;
+    }
+
+    @Override
+    public boolean stopCellEditing() {
+      return true;
+    }
+
+    @Override
+    public void cancelCellEditing() {
+    }
+
+    @Override
+    public void addCellEditorListener(CellEditorListener l) {
+    }
+
+    @Override
+    public void removeCellEditorListener(CellEditorListener l) {
+    }
+  }
+
+  /**
+   * The reminders view displaying only the reminders for a specific day. Opened when the day is
+   * clicked on in the calendar.
+   */
+  private class DayView implements IRemindersView {
+
+    /**
+     * The day of the month that is being viewed.
+     */
+    private final int day;
+
+    /**
+     * The date being viewed, in milliseconds.
+     */
+    private final long dateMillis;
+
+    /**
+     * The dialog of the view.
+     */
+    private final JDialog dialog;
+
+    public DayView(int day) {
+      this.day = day;
+      this.dateMillis = LocalDate.of(year, month + 1, day)
+          .atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli();
+
+      this.dialog = new JDialog(Main.getMainFrame(), MONTHS[month] + " " + day + ", " + year, true);
+      dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+      dialog.setResizable(false);
+      dialog.setSize(1200, 650);
+      dialog.setLocationRelativeTo(null);
+
+      addListPanel();
+
+      dialog.setVisible(true);
+    }
+
+    /**
+     * Adds the panel containing a list of reminders to the frame.
+     */
+    private void addListPanel() {
+      dialog.add(new RemindersListPanel(DayView.this,
+          getRemindersFromDay(year, month + 1, day), () -> {
+        // Open the editor with the date already selected.
+        new ReminderEditorFrame(DayView.this, new Reminder(UUID.randomUUID().toString(),
+            null, null, dateMillis, null));
+      }));
+    }
+
+    @Override
+    public void refresh() {
+      dialog.getContentPane().removeAll();
+      addListPanel();
+      dialog.revalidate();
+      dialog.repaint();
     }
   }
 }
