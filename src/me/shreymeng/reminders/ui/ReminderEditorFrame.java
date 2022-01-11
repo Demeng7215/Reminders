@@ -63,7 +63,7 @@ public class ReminderEditorFrame {
     this.view = view;
 
     // Use a modal dialog instead of normal JFrame to disable interactions in other frames.
-    final JDialog dialog = new JDialog(
+    JDialog dialog = new JDialog(
         Main.getMainFrame(), current == null ? "Add Reminder" : "Edit Reminder", true);
 
     dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -71,45 +71,45 @@ public class ReminderEditorFrame {
     dialog.setSize(600, 350);
     dialog.setLocationRelativeTo(null);
 
-    final JPanel panel = new JPanel();
+    JPanel panel = new JPanel();
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
     panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-    final JLabel titleLabel = new JLabel("Task");
-    final JTextField titleField = new JTextField();
+    JLabel titleLabel = new JLabel("Task");
+    JTextField titleField = new JTextField();
     titleField.setMaximumSize(new Dimension(550, 24));
     titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
     titleField.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-    final JLabel descriptionLabel = new JLabel("Description");
-    final JTextField descriptionField = new JTextField();
+    JLabel descriptionLabel = new JLabel("Description");
+    JTextField descriptionField = new JTextField();
     descriptionField.setMaximumSize(new Dimension(550, 24));
     descriptionLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
     descriptionField.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-    final JLabel dueDateLabel = new JLabel("Due Date");
-    final DueDatePanel dueDatePanel = new DueDatePanel(current == null ? -1 : current.getDueDate());
+    JLabel dueDateLabel = new JLabel("Due Date");
+    DueDatePanel dueDatePanel = new DueDatePanel(current == null ? -1 : current.getDueDate());
     dueDatePanel.setMaximumSize(new Dimension(550, 24));
     dueDateLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
     dueDatePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-    final JLabel priorityLabel = new JLabel("Priority");
-    final JComboBox<String> priorityDropdown = new JComboBox<>(
+    JLabel priorityLabel = new JLabel("Priority");
+    JComboBox<String> priorityDropdown = new JComboBox<>(
         Arrays.stream(Priority.values()).map(Priority::toString).toArray(String[]::new));
     priorityDropdown.setMaximumSize(new Dimension(550, 24));
     priorityDropdown.setSelectedIndex(1);
     priorityLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
     priorityDropdown.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-    final List<Label> selectedLabels = new ArrayList<>();
+    List<Label> selectedLabels = new ArrayList<>();
 
     if (current != null) {
       // Add current labels.
       selectedLabels.addAll(current.getLabels());
     }
 
-    final JLabel labelsLabel = new JLabel("Labels (" + selectedLabels.size() + " selected)");
-    final JButton labelsButton = new JButton("Select Labels...");
+    JLabel labelsLabel = new JLabel("Labels (" + selectedLabels.size() + " selected)");
+    JButton labelsButton = new JButton("Select Labels...");
     labelsLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
     labelsButton.setAlignmentX(Component.LEFT_ALIGNMENT);
     labelsButton.addActionListener(e -> new LabelFrame(dialog, selectedLabels, selected -> {
@@ -149,7 +149,7 @@ public class ReminderEditorFrame {
     panel.add(labelsLabel);
     panel.add(labelsButton);
 
-    final JButton saveButton = new JButton("Save");
+    JButton saveButton = new JButton("Save");
     saveButton.addActionListener(e -> {
 
       if (titleField.getText().isBlank()) {
@@ -162,10 +162,10 @@ public class ReminderEditorFrame {
         return;
       }
 
-      final long dueDate = dueDatePanel.getSelected().atZone(ZoneId.systemDefault()).toInstant()
+      long dueDate = dueDatePanel.getSelected().atZone(ZoneId.systemDefault()).toInstant()
           .toEpochMilli();
 
-      final Reminder updatedReminder;
+      Reminder updatedReminder;
 
       if (current != null) {
         current.setTask(titleField.getText());
@@ -215,7 +215,7 @@ public class ReminderEditorFrame {
       setLayout(new FlowLayout(FlowLayout.LEFT, 2, 0));
 
       // The current date and time.
-      final LocalDateTime dateTime;
+      LocalDateTime dateTime;
 
       if (currentTime == -1) {
         dateTime = LocalDateTime.now(ZoneId.systemDefault());
@@ -225,7 +225,7 @@ public class ReminderEditorFrame {
       }
 
       // The number of days in the current month.
-      final int daysInMonth = YearMonth.of(dateTime.getYear(), dateTime.getMonthValue())
+      int daysInMonth = YearMonth.of(dateTime.getYear(), dateTime.getMonthValue())
           .lengthOfMonth();
 
       this.dayDropdown = new JComboBox<>(
@@ -245,15 +245,15 @@ public class ReminderEditorFrame {
       monthDropdown.addActionListener(e -> {
         // Update daysDropdown to prevent selecting days greater than number of days in the month.
 
-        final Integer selectedYear = (Integer) yearDropdown.getSelectedItem();
-        final Month selectedMonth = (Month) monthDropdown.getSelectedItem();
+        Integer selectedYear = (Integer) yearDropdown.getSelectedItem();
+        Month selectedMonth = (Month) monthDropdown.getSelectedItem();
 
         if (selectedYear == null || selectedMonth == null) {
           return;
         }
 
-        final int monthLength = YearMonth.of(selectedYear, selectedMonth).lengthOfMonth();
-        final int selectedDayIndex = dayDropdown.getSelectedIndex();
+        int monthLength = YearMonth.of(selectedYear, selectedMonth).lengthOfMonth();
+        int selectedDayIndex = dayDropdown.getSelectedIndex();
 
         dayDropdown.removeAllItems();
 
@@ -317,16 +317,16 @@ public class ReminderEditorFrame {
     public LabelFrame(JDialog mainDialog, List<Label> alreadySelected,
         Consumer<List<Label>> consumer) {
 
-      final JDialog dialog = new JDialog(mainDialog, "Select Labels", true);
+      JDialog dialog = new JDialog(mainDialog, "Select Labels", true);
       dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
       dialog.setResizable(false);
       dialog.setSize(300, 400);
       dialog.setLocationRelativeTo(null);
 
-      final JPanel panel = new JPanel();
+      JPanel panel = new JPanel();
       panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-      final JButton createButton = new JButton("+ Create Label");
+      JButton createButton = new JButton("+ Create Label");
       createButton.addActionListener(e ->
           new LabelEditorFrame(null, dialog, () -> {
             dialog.dispose();
@@ -335,17 +335,17 @@ public class ReminderEditorFrame {
           }));
 
       // Associate each label with a checkbox.
-      final Map<Label, JCheckBox> checkBoxes = new LinkedHashMap<>();
+      Map<Label, JCheckBox> checkBoxes = new LinkedHashMap<>();
 
       // Add a checkbox for each label.
       for (Label label : LabelsManager.getLabels()) {
 
-        final JPanel labelPanel = new JPanel();
+        JPanel labelPanel = new JPanel();
         labelPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         labelPanel.setMinimumSize(new Dimension(300, 30));
         labelPanel.setMaximumSize(new Dimension(300, 30));
 
-        final JCheckBox checkBox = new JCheckBox("| " + label.getName());
+        JCheckBox checkBox = new JCheckBox("| " + label.getName());
         checkBox.setForeground(label.getColor());
 
         if (alreadySelected.contains(label)) {
@@ -354,7 +354,7 @@ public class ReminderEditorFrame {
 
         checkBoxes.put(label, checkBox);
 
-        final JButton editButton = new JButton("Edit");
+        JButton editButton = new JButton("Edit");
         editButton.setPreferredSize(new Dimension(60, 18));
         editButton.addActionListener(e ->
             new LabelEditorFrame(label, dialog, () -> {
@@ -363,7 +363,7 @@ public class ReminderEditorFrame {
               view.refresh();
             }));
 
-        final JButton deleteButton = new JButton("x");
+        JButton deleteButton = new JButton("x");
         deleteButton.setPreferredSize(new Dimension(38, 18));
         deleteButton.addActionListener(e -> {
 
@@ -395,13 +395,13 @@ public class ReminderEditorFrame {
       }
 
       // Put labels in a scroll pane for large amounts of labels.
-      final JScrollPane scrollPane = new JScrollPane(panel);
+      JScrollPane scrollPane = new JScrollPane(panel);
       scrollPane.getVerticalScrollBar().setUnitIncrement(16);
       scrollPane.setBorder(
           BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY),
               BorderFactory.createEmptyBorder(10, 10, 0, 10)));
 
-      final JButton okButton = new JButton("OK");
+      JButton okButton = new JButton("OK");
       okButton.addActionListener(e -> {
         dialog.dispose();
         // Accept the consumer with a list of selected labels.
@@ -432,26 +432,26 @@ public class ReminderEditorFrame {
      */
     public LabelEditorFrame(Label existing, JDialog selectDialog, Runnable refreshTask) {
 
-      final JDialog dialog = new JDialog(
+      JDialog dialog = new JDialog(
           selectDialog, existing == null ? "Create Label" : "Edit Label", true);
       dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
       dialog.setResizable(false);
       dialog.setSize(500, 500);
       dialog.setLocationRelativeTo(null);
 
-      final JPanel panel = new JPanel();
+      JPanel panel = new JPanel();
       panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-      final JLabel nameLabel = new JLabel("Name");
-      final JTextField nameField = new JTextField();
+      JLabel nameLabel = new JLabel("Name");
+      JTextField nameField = new JTextField();
       nameLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
       nameField.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-      final JCheckBox categoryCheckBox = new JCheckBox("Create a separate tab for this label");
+      JCheckBox categoryCheckBox = new JCheckBox("Create a separate tab for this label");
       categoryCheckBox.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-      final JLabel colorLabel = new JLabel("Color");
-      final JColorChooser colorSelector = new JColorChooser(
+      JLabel colorLabel = new JLabel("Color");
+      JColorChooser colorSelector = new JColorChooser(
           existing == null ? Color.BLACK : existing.getColor());
       colorLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
       colorSelector.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -471,10 +471,10 @@ public class ReminderEditorFrame {
       panel.add(Box.createRigidArea(new Dimension(0, 10)));
       panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-      final JButton createButton = new JButton("Create");
+      JButton createButton = new JButton("Create");
       createButton.addActionListener(e -> {
 
-        final String name = nameField.getText();
+        String name = nameField.getText();
 
         if (name.isBlank()) {
           JOptionPane.showMessageDialog(null, "Label name cannot be empty!");

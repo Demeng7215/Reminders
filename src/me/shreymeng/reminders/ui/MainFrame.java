@@ -15,14 +15,14 @@ public class MainFrame {
 
   public MainFrame() {
 
-    final JFrame frame = new JFrame("My Reminders");
+    JFrame frame = new JFrame("My Reminders");
     Main.setMainFrame(frame);
     frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     frame.setResizable(false);
     frame.setSize(1280, 720);
     frame.setLocationRelativeTo(null);
 
-    final JTabbedPane tabs = new JTabbedPane();
+    JTabbedPane tabs = new JTabbedPane();
     tabs.add("My Reminders", new ListView());
     //TODO Add calendar view.
     tabs.add("Calendar", new JPanel());

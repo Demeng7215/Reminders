@@ -24,15 +24,15 @@ public class Test {
 
   public static void addTestReminders() {
 
-    final Label label1 = new Label("Label 1", Color.decode("#5b14ff"), true);
-    final Label label2 = new Label("Label 2", Color.decode("#ff3300"), false);
-    final Label label3 = new Label("Label 3", Color.decode("#0b6b00"), false);
+    Label label1 = new Label("Label 1", Color.decode("#5b14ff"), true);
+    Label label2 = new Label("Label 2", Color.decode("#ff3300"), false);
+    Label label3 = new Label("Label 3", Color.decode("#0b6b00"), false);
 
     LabelsManager.addLabel(label1);
     LabelsManager.addLabel(label2);
     LabelsManager.addLabel(label3);
 
-    final Reminder reminder1 = new Reminder(
+    Reminder reminder1 = new Reminder(
         UUID.randomUUID().toString(),
         "Reminder 1",
         "Test reminder 1.",
@@ -40,7 +40,7 @@ public class Test {
         Priority.HIGH,
         label1, label3);
 
-    final Reminder reminder2 = new Reminder(
+    Reminder reminder2 = new Reminder(
         UUID.randomUUID().toString(),
         "Reminder 2",
         "Test reminder 2.",
@@ -52,7 +52,7 @@ public class Test {
     RemindersManager.addReminder(reminder2);
 
     for (int i = 3; i <= 10; i++) {
-      final Reminder reminder = new Reminder(
+      Reminder reminder = new Reminder(
           UUID.randomUUID().toString(),
           "Reminder " + i,
           "Some random description...",

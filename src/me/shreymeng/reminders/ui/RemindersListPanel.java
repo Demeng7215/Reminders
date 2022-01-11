@@ -45,11 +45,11 @@ public class RemindersListPanel extends JPanel {
   public RemindersListPanel(IRemindersView view, List<Reminder> reminders, Runnable addAction) {
     this.view = view;
 
-    final JButton addButton = new JButton("+ New Reminder");
+    JButton addButton = new JButton("+ New Reminder");
     addButton.setPreferredSize(new Dimension(900, 25));
     addButton.addActionListener(e -> addAction.run());
 
-    final JPanel panel = new JPanel();
+    JPanel panel = new JPanel();
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
     for (Reminder reminder : reminders) {
@@ -80,53 +80,53 @@ public class RemindersListPanel extends JPanel {
    */
   private JPanel reminderPanel(Reminder reminder) {
 
-    final JPanel panel = new JPanel();
+    JPanel panel = new JPanel();
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
     // Force the size of the panel so the scroll pane does not mess up the format.
     panel.setMinimumSize(new Dimension(1000, 105));
     panel.setMaximumSize(new Dimension(1000, 105));
 
-    final JLabel titleLabel = new JLabel(reminder.getTask());
+    JLabel titleLabel = new JLabel(reminder.getTask());
     titleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 14));
     titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-    final JLabel descriptionLabel = new JLabel(reminder.getDescription());
+    JLabel descriptionLabel = new JLabel(reminder.getDescription());
     descriptionLabel.setForeground(Color.GRAY);
     descriptionLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 14));
     descriptionLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-    final JLabel dueDateLabel = new JLabel(
+    JLabel dueDateLabel = new JLabel(
         "Due: " + Common.formatDateTime(reminder.getDueDate()));
     dueDateLabel.setFont(new Font(Font.SANS_SERIF, Font.ITALIC, 14));
     dueDateLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
     // The reminder footer, containing all other relevant information.
-    final JPanel footer = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+    JPanel footer = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
 
     // All of the reminder's labels.
     for (Label label : reminder.getLabels()) {
-      final JLabel labelLabel = new JLabel("| " + label.getName() + "  ");
+      JLabel labelLabel = new JLabel("| " + label.getName() + "  ");
       labelLabel.setForeground(label.getColor());
       labelLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 14));
       footer.add(labelLabel);
     }
 
     // The priority of the reminder.
-    final JLabel priorityLabel = new JLabel("  " + reminder.getPriority().toString());
+    JLabel priorityLabel = new JLabel("  " + reminder.getPriority().toString());
     priorityLabel.setForeground(reminder.getPriority().getColor());
     priorityLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 14));
     footer.add(priorityLabel);
 
     // Buttons for interacting with the reminder.
-    final JPanel buttons = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    JPanel buttons = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
-    final JButton completeButton = new JButton("✔");
+    JButton completeButton = new JButton("✔");
     completeButton.addActionListener(e -> {
       RemindersManager.removeReminder(reminder);
       view.refresh();
     });
 
-    final JButton editButton = new JButton("Edit");
+    JButton editButton = new JButton("Edit");
     editButton.addActionListener(e -> new ReminderEditorFrame(view, reminder));
 
     buttons.add(completeButton);

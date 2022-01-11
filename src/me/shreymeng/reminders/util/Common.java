@@ -35,14 +35,14 @@ public class Common {
    */
   public static String formatDateTime(long dateTime) {
 
-    final String formatted;
+    String formatted;
 
-    final LocalDateTime localDate = new Date(dateTime)
+    LocalDateTime localDate = new Date(dateTime)
         .toInstant()
         .atZone(ZoneId.systemDefault())
         .toLocalDateTime();
 
-    final boolean includeTime = !(localDate.getHour() == 0 && localDate.getMinute() == 0);
+    boolean includeTime = !(localDate.getHour() == 0 && localDate.getMinute() == 0);
 
     if (localDate.getYear() == LocalDate.now().getYear()) {
       formatted = localDate.format(includeTime ? DATE_TIME_NO_YEAR_FORMAT : DATE_NO_YEAR_FORMAT);

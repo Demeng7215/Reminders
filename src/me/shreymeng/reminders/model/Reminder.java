@@ -132,7 +132,7 @@ public class Reminder {
       return false;
     }
 
-    final Reminder reminder = (Reminder) o;
+    Reminder reminder = (Reminder) o;
     return Objects.equals(id, reminder.id);
   }
 }

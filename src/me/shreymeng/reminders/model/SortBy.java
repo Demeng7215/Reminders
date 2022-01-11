@@ -71,7 +71,7 @@ public enum SortBy {
 
     @Override
     public List<Reminder> sort(List<Reminder> unsorted) {
-      final List<Reminder> reminders = new ArrayList<>(unsorted);
+      List<Reminder> reminders = new ArrayList<>(unsorted);
       // Sort by checking which reminder has a "smaller" due date.
       reminders.sort((o1, o2) -> (int) (o1.getDueDate() - o2.getDueDate()));
       return reminders;
@@ -86,8 +86,8 @@ public enum SortBy {
     @Override
     public List<Reminder> sort(List<Reminder> unsorted) {
 
-      final List<Reminder> reminders = new ArrayList<>();
-      final Map<Priority, List<Reminder>> priorityMap = new EnumMap<>(Priority.class);
+      List<Reminder> reminders = new ArrayList<>();
+      Map<Priority, List<Reminder>> priorityMap = new EnumMap<>(Priority.class);
 
       // Split the list into multiple sub-lists based on its priority.
       for (Priority priority : Priority.values()) {
@@ -97,7 +97,7 @@ public enum SortBy {
       }
 
       // Collect and reverse the prioritized reminders so the highest priorities are listed first.
-      final List<List<Reminder>> prioritizedReminders = new ArrayList<>(priorityMap.values());
+      List<List<Reminder>> prioritizedReminders = new ArrayList<>(priorityMap.values());
       Collections.reverse(prioritizedReminders);
 
       // Sort all priority sub-lists by due date.

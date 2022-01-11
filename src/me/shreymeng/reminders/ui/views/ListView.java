@@ -53,7 +53,7 @@ public class ListView extends JPanel implements IRemindersView {
 
     // Remove the current tabbed pane.
     if (currentCategoryTabs != null) {
-      final int selectedIndex = currentCategoryTabs.getSelectedIndex();
+      int selectedIndex = currentCategoryTabs.getSelectedIndex();
       selectedName = currentCategoryTabs.getTitleAt(selectedIndex);
       selectedScroll = ((RemindersListPanel) currentCategoryTabs.getComponentAt(selectedIndex))
           .getScrollPane().getViewport().getViewPosition().y;
@@ -63,9 +63,9 @@ public class ListView extends JPanel implements IRemindersView {
       repaint();
     }
 
-    final List<Reminder> reminders = RemindersManager.getReminders(sortBy);
+    List<Reminder> reminders = RemindersManager.getReminders(sortBy);
 
-    final JTabbedPane categoryTabs = new JTabbedPane();
+    JTabbedPane categoryTabs = new JTabbedPane();
 
     // Create the "All" category.
     categoryTabs.add("All",
@@ -111,7 +111,7 @@ public class ListView extends JPanel implements IRemindersView {
       add(new JLabel("Sort By:"));
 
       // Add all sorting methods to the dropdown.
-      final JComboBox<String> selector = new JComboBox<>(
+      JComboBox<String> selector = new JComboBox<>(
           Arrays.stream(SortBy.values()).map(SortBy::toString).toArray(String[]::new));
       // Set the default selected item.
       selector.setSelectedItem(SortBy.DUE_DATE);
