@@ -1,170 +1,199 @@
 package me.shreymeng.reminders.ui.views;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.time.LocalDate;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.List;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import me.shreymeng.reminders.model.Reminder;
-import me.shreymang.reminders.model.SortBy;
-import me.shreymeng.reminders.util.Common;
-import me.shreymeng.reminders.manager.RemindersManager;
 
-public class CalendarView extends JPanel{
-	static JLabel header;
-	static JButton prev, next;
-	static JTable tCalendar;
-	static DefaultTableModel dtmCalendar;
-	static JScrollPane spCalendar;
-	static int realDay, realYear, realMonth, currentYear, currentMonth;
-	static int startOfMonth, daysLeft;
-	private static SortBy sortBy = SortBy.DUE_DATE;
-	
-	public CalendarView() {
-		this.setLayout(new BorderLayout());
-		
-		JPanel head = new JPanel(new BorderLayout());
-		head.setBorder(new EmptyBorder(10, 5, 5, 5));
+public class CalendarView extends JPanel implements IRemindersView {
 
-		header = new JLabel();
-		header.setHorizontalAlignment(JLabel.CENTER);
-		header.setFont(new Font("Calibri", Font.PLAIN, 24));
-		prev = new JButton ("<<");
-		next = new JButton (">>");
-		
-		//allows for movement between months
-		prev.addActionListener(new ActionListener() {
-			public void actionPerformed (ActionEvent e){
-				if (currentMonth == 0){ //goes back by one year
-					currentMonth = 11;
-					currentYear -= 1;
-				} else { //goes back by one month
-					currentMonth -= 1;
-				}
-				refreshCalendar(currentMonth, currentYear);
-			}});
-		
-		next.addActionListener(new ActionListener() {
-			public void actionPerformed (ActionEvent e){
-				if (currentMonth == 11){ //goes forward by one year
-					currentMonth = 0;
-					currentYear += 1;
-				} else { //goes forward by one month
-					currentMonth += 1;
-				}
-				refreshCalendar(currentMonth, currentYear);
-			}});
-		
-		//set up the calendar
-		dtmCalendar = new DefaultTableModel(){
-			public boolean isCellEditable(int rowInd, int colInd){
-				return false;}};
-		tCalendar = new JTable(dtmCalendar);
-		spCalendar = new JScrollPane(tCalendar);
+  private static final String[] MONTHS = {"January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"};
 
-		this.setBounds(0, 0, 1235, 705);
-		this.setBorder(new EmptyBorder(5, 10, 5, 10));
+  private static final String[] DAYS_OF_WEEK = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
 
-		head.add(prev, BorderLayout.WEST);
-		head.add(header, BorderLayout.CENTER);
-		head.add(next, BorderLayout.EAST);
-		this.add(head, BorderLayout.NORTH);
-		this.add(spCalendar, BorderLayout.CENTER);
+  private final LocalDateTime now = LocalDateTime.now(ZoneId.systemDefault());
 
-		//get real month/year
-		GregorianCalendar cal = new GregorianCalendar();
-		realMonth = cal.get(GregorianCalendar.MONTH);
-		realYear = cal.get(GregorianCalendar.YEAR);
-		currentMonth = realMonth;
-		currentYear = realYear;
+  /**
+   * The calendar header label, containing month and year information.
+   */
+  private final JLabel headerLabel;
 
-		String[] headers = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
-		for (int i = 0; i < 7; i++){
-			dtmCalendar.addColumn(headers[i]);
-		}
+  /**
+   * The button to return to the previous month.
+   */
+  private final JButton previousButton;
 
-		//set the rows/columns
-		tCalendar.setRowHeight(100);
-		dtmCalendar.setColumnCount(7);
-		dtmCalendar.setRowCount(6);
+  /**
+   * The button to advance to the next month.
+   */
+  private final JButton nextButton;
 
-		//refresh the calendar
-		refreshCalendar (realMonth, realYear);
-		
-	}
+  /**
+   * The table model for the calendar.
+   */
+  private final DefaultTableModel tableModel;
 
-	public static void refreshCalendar(int month, int year) {
+  /**
+   * The actual calendar component.
+   */
+  private final JTable table;
 
-		String[] months =  {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
-		int numOfDays; //number of days in the current month
-		
-		//get information on real date 
-		GregorianCalendar currentMonth = new GregorianCalendar(year, month, 1);
-		realDay = currentMonth.get(GregorianCalendar.DAY_OF_MONTH);
-		numOfDays = currentMonth.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
-		startOfMonth = currentMonth.get(GregorianCalendar.DAY_OF_WEEK);
-		int currentYear = currentMonth.get(GregorianCalendar.YEAR);
+  /**
+   * The current month being viewed.
+   */
+  private int month;
+  /**
+   * The current year being viewed.
+   */
+  private int year;
 
-		//controls if the button should be clicked
-		if (month == 0 && year <= realYear - 10){
-			prev.setEnabled(false);  //too early
-		}
-		if (month == 11 && year >= realYear + 100){
-			next.setEnabled(false);  //too late
-		}
-		
-		//refresh the header label
-		header.setText(months[month] + " - " + currentYear);
-		
-		//clear table
-		for (int i = 0; i < 6; i++){
-			for (int j = 0; j < 7; j++){
-				dtmCalendar.setValueAt(null, i, j);
-			}
-		}
-		
-		//add dates for calendar
-		for (int i = 1; i <= numOfDays; i++){
-			int row = (i + startOfMonth - 2) / 7;
-			int column = (i + startOfMonth - 2) % 7;
-			dtmCalendar.setValueAt(" " + String.valueOf(i), row, column);
-		}
-		
-		//apply the renderer
-		tCalendar.setDefaultRenderer(tCalendar.getColumnClass(0), new CalendarRenderer());
-		
-	}
-	
-	public static class CalendarRenderer extends DefaultTableCellRenderer{
-        public Component getTableCellRendererComponent (JTable table, Object value, boolean isSelected, boolean isFocused, int row, int column){
-            super.getTableCellRendererComponent(table, value, isSelected, isFocused, row, column);
-            
-            setBackground(Color.white);
-            setForeground(Color.black);
-      
-            if(value == null) { //dates outside of the current month
-            	setBackground(new Color(238, 233, 255));
-            } else {
-                setBackground(new Color(255, 255, 255));
-            }
-     
-            setBorder(null);
-            return this;
-        }
+  public CalendarView() {
+    setLayout(new BorderLayout());
+
+    JPanel header = new JPanel(new BorderLayout());
+    header.setBorder(new EmptyBorder(10, 5, 5, 5));
+
+    this.headerLabel = new JLabel();
+    headerLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 24));
+    headerLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+    this.previousButton = new JButton("<<");
+    this.nextButton = new JButton(">>");
+
+    // Allows moving between months.
+    previousButton.addActionListener(e -> {
+      if (month == 0) {
+        // Go back by 1 year.
+        month = 11;
+        year -= 1;
+      } else {
+        // Go back by 1 month.
+        month -= 1;
+      }
+
+      refresh();
+    });
+
+    nextButton.addActionListener(e -> {
+      if (month == 11) {
+        // Go forwards by 1 year.
+        month = 0;
+        year += 1;
+      } else {
+        // Go forwards by 1 month.
+        month += 1;
+      }
+
+      refresh();
+    });
+
+    header.add(previousButton, BorderLayout.LINE_START);
+    header.add(headerLabel, BorderLayout.CENTER);
+    header.add(nextButton, BorderLayout.LINE_END);
+
+    this.tableModel = new DefaultTableModel() {
+      @Override
+      public boolean isCellEditable(int rowInd, int colInd) {
+        // Disable all cells from being edited.
+        return false;
+      }
+    };
+
+    // Create a new table with our custom model.
+    this.table = new JTable(tableModel);
+
+    for (String dayOfWeek : DAYS_OF_WEEK) {
+      tableModel.addColumn(dayOfWeek);
     }
+
+    // Set rows and columns.
+    table.setRowHeight(96);
+    tableModel.setColumnCount(7);
+    tableModel.setRowCount(6);
+
+    add(header, BorderLayout.NORTH);
+    add(new JScrollPane(table), BorderLayout.CENTER);
+
+    this.month = now.getMonthValue() - 1;
+    this.year = now.getYear();
+
+    // Fill the calendar.
+    refresh();
+  }
+
+  @Override
+  public void refresh() {
+
+    GregorianCalendar calendar = new GregorianCalendar(year, month, 1);
+    int daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+    int startOfMonth = calendar.get(Calendar.DAY_OF_WEEK);
+
+    // Disable the "previous" button if the year is more than a year from now.
+    if (month == 0 && year < now.getYear() - 1) {
+      previousButton.setEnabled(false);
+    }
+
+    // Disable the "next" button if the year is more than 5 years from now.
+    if (month == 11 && year >= now.getYear() + 5) {
+      nextButton.setEnabled(false);
+    }
+
+    // Refresh the header label.
+    headerLabel.setText(MONTHS[month] + " - " + year);
+
+    // Clear the current table.
+    for (int i = 0; i < 6; i++) {
+      for (int j = 0; j < 7; j++) {
+        tableModel.setValueAt(null, i, j);
+      }
+    }
+
+    // Add updated calendar dates.
+    for (int i = 1; i <= daysInMonth; i++) {
+      int row = (i + startOfMonth - 2) / 7;
+      int column = (i + startOfMonth - 2) % 7;
+      tableModel.setValueAt(" " + i, row, column);
+    }
+
+    // Apply the custom renderer.
+    table.setDefaultRenderer(table.getColumnClass(0), new CalendarRenderer());
+  }
+
+  /**
+   * The custom table cell renderer to change the display of table cells.
+   */
+  private static class CalendarRenderer extends DefaultTableCellRenderer {
+
+    @Override
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+        boolean isFocused, int row, int column) {
+      super.getTableCellRendererComponent(table, value, isSelected, isFocused, row, column);
+
+      setBorder(null);
+      setForeground(Color.BLACK);
+
+      if (value == null) {
+        // The "day" is outside the current month.
+        setBackground(Color.LIGHT_GRAY);
+      } else {
+        setBackground(Color.WHITE);
+      }
+
+      return this;
+    }
+  }
 }
