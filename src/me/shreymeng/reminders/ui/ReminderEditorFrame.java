@@ -157,11 +157,6 @@ public class ReminderEditorFrame {
         return;
       }
 
-      if (descriptionField.getText().isBlank()) {
-        JOptionPane.showMessageDialog(dialog, "Task description cannot be blank!");
-        return;
-      }
-
       long dueDate = dueDatePanel.getSelected().atZone(ZoneId.systemDefault()).toInstant()
           .toEpochMilli();
 
