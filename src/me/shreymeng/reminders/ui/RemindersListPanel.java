@@ -120,7 +120,7 @@ public class RemindersListPanel extends JPanel {
     // Buttons for interacting with the reminder.
     JPanel buttons = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
-    JButton completeButton = new JButton("✔");
+    JButton completeButton = new JButton("Done");
     completeButton.addActionListener(e -> {
       RemindersManager.removeReminder(reminder);
       view.refresh();
