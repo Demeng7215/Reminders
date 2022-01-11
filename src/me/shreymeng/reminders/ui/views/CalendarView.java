@@ -143,14 +143,9 @@ public class CalendarView extends JPanel implements IRemindersView {
     int startOfMonth = calendar.get(Calendar.DAY_OF_WEEK);
 
     // Disable the "previous" button if the year is more than a year from now.
-    if (month == 0 && year < now.getYear() - 1) {
-      previousButton.setEnabled(false);
-    }
-
+    previousButton.setEnabled(!(month == 0 && year < now.getYear() - 1));
     // Disable the "next" button if the year is more than 5 years from now.
-    if (month == 11 && year >= now.getYear() + 5) {
-      nextButton.setEnabled(false);
-    }
+    nextButton.setEnabled(!(month == 11 && year >= now.getYear() + 5));
 
     // Refresh the header label.
     headerLabel.setText(MONTHS[month] + " - " + year);
