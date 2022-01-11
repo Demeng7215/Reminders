@@ -5,6 +5,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.WindowConstants;
 import me.shreymeng.reminders.Main;
 import me.shreymeng.reminders.ui.views.CalendarView;
+import me.shreymeng.reminders.ui.views.IRemindersView;
 import me.shreymeng.reminders.ui.views.ListView;
 
 /**
@@ -25,6 +26,9 @@ public class MainFrame {
     JTabbedPane tabs = new JTabbedPane();
     tabs.add("My Reminders", new ListView());
     tabs.add("Calendar", new CalendarView());
+
+    tabs.addChangeListener(
+        e -> ((IRemindersView) tabs.getComponentAt(tabs.getSelectedIndex())).refresh());
 
     frame.add(tabs);
     frame.setVisible(true);

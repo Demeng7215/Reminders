@@ -6,6 +6,8 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -346,6 +348,15 @@ public class CalendarView extends JPanel implements IRemindersView {
       dialog.setLocationRelativeTo(null);
 
       addListPanel();
+
+      // Refresh the main calendar view when the window is close.
+      dialog.addWindowListener(new WindowAdapter() {
+        @Override
+        public void windowClosed(WindowEvent e) {
+          super.windowClosed(e);
+          CalendarView.this.refresh();
+        }
+      });
 
       dialog.setVisible(true);
     }
