@@ -152,8 +152,13 @@ public class ReminderEditorFrame {
     JButton saveButton = new JButton("Save");
     saveButton.addActionListener(e -> {
 
-      if (titleField.getText().isBlank()) {
-        JOptionPane.showMessageDialog(dialog, "Task cannot be blank!");
+      if (titleField.getText().isBlank() || titleField.getText().contains("|")) {
+        JOptionPane.showMessageDialog(dialog, "Task name is invalid!");
+        return;
+      }
+
+      if (descriptionField.getText().contains("|")) {
+        JOptionPane.showMessageDialog(dialog, "Task description is invalid!");
         return;
       }
 
@@ -471,8 +476,8 @@ public class ReminderEditorFrame {
 
         String name = nameField.getText();
 
-        if (name.isBlank()) {
-          JOptionPane.showMessageDialog(null, "Label name cannot be empty!");
+        if (name.isBlank() || name.contains("|")) {
+          JOptionPane.showMessageDialog(null, "Label name is invalid!");
           return;
         }
 
