@@ -1,7 +1,9 @@
 package me.shreymeng.reminders.manager;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import me.shreymeng.reminders.Main;
 import me.shreymeng.reminders.model.Label;
 
 /**
@@ -9,7 +11,6 @@ import me.shreymeng.reminders.model.Label;
  */
 public class LabelsManager {
 
-  //TODO Implement GSON file saving/loading.
   private static final List<Label> LABELS = new ArrayList<>();
 
   /**
@@ -19,6 +20,7 @@ public class LabelsManager {
    */
   public static void addLabel(Label label) {
     LABELS.add(label);
+    save();
   }
 
   /**
@@ -28,6 +30,7 @@ public class LabelsManager {
    */
   public static void removeLabel(Label label) {
     LABELS.remove(label);
+    save();
   }
 
   /**
@@ -37,5 +40,14 @@ public class LabelsManager {
    */
   public static List<Label> getLabels() {
     return LABELS;
+  }
+
+  private static void save() {
+    try {
+      Main.getLabelsDataFile().save(LABELS);
+    } catch (IOException ex) {
+      ex.printStackTrace();
+      System.err.println("Failed to save labels.");
+    }
   }
 }
