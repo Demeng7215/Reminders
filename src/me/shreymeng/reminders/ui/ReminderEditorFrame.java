@@ -499,6 +499,7 @@ public class ReminderEditorFrame {
           existing.setName(name);
           existing.setColor(colorSelector.getColor());
           existing.setCategory(categoryCheckBox.isSelected());
+          LabelsManager.save();
         }
 
         dialog.dispose();

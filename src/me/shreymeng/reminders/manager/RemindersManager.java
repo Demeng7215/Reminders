@@ -55,7 +55,7 @@ public class RemindersManager {
     return REMINDERS;
   }
 
-  private static void save() {
+  public static void save() {
     try {
       Main.getRemindersDataFile().save(REMINDERS.values());
     } catch (IOException ex) {

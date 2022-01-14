@@ -42,7 +42,7 @@ public class LabelsManager {
     return LABELS;
   }
 
-  private static void save() {
+  public static void save() {
     try {
       Main.getLabelsDataFile().save(LABELS);
     } catch (IOException ex) {
