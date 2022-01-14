@@ -471,8 +471,8 @@ public class ReminderEditorFrame {
       panel.add(Box.createRigidArea(new Dimension(0, 10)));
       panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-      JButton createButton = new JButton("Create");
-      createButton.addActionListener(e -> {
+      JButton saveButton = new JButton("Save");
+      saveButton.addActionListener(e -> {
 
         String name = nameField.getText();
 
@@ -507,7 +507,7 @@ public class ReminderEditorFrame {
       });
 
       dialog.add(panel);
-      dialog.add(createButton, BorderLayout.PAGE_END);
+      dialog.add(saveButton, BorderLayout.PAGE_END);
       dialog.setVisible(true);
     }
   }
