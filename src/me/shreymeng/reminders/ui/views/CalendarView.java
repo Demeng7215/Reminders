@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.EventObject;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -369,7 +370,7 @@ public class CalendarView extends JPanel implements IRemindersView {
           getRemindersFromDay(year, month + 1, day), () -> {
         // Open the editor with the date already selected.
         new ReminderEditorFrame(DayView.this, new Reminder(UUID.randomUUID().toString(),
-            null, null, dateMillis, null));
+            null, null, dateMillis, null, Collections.emptyList()));
       }));
     }
 

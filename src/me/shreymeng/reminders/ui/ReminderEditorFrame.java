@@ -178,7 +178,7 @@ public class ReminderEditorFrame {
             descriptionField.getText(),
             dueDate,
             Priority.values()[priorityDropdown.getSelectedIndex()],
-            selectedLabels.toArray(new Label[0]));
+            selectedLabels);
       }
 
       RemindersManager.addReminder(updatedReminder);

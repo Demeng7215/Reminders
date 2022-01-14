@@ -1,6 +1,6 @@
 package me.shreymeng.reminders.model;
 
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -45,16 +45,16 @@ public class Reminder {
    * @param description The task description
    * @param dueDate     The task due date
    * @param priority    The task priority
-   * @param labels      The set of labels belonging to the task
+   * @param labels      The collection of labels belonging to the task
    */
   public Reminder(String id, String task, String description, long dueDate, Priority priority,
-      Label... labels) {
+      Collection<Label> labels) {
     this.id = id;
     this.task = task;
     this.description = description;
     this.dueDate = dueDate;
     this.priority = priority;
-    this.labels.addAll(Arrays.asList(labels));
+    this.labels.addAll(labels);
   }
 
   public String getId() {
@@ -106,7 +106,7 @@ public class Reminder {
   }
 
   public Reminder copy() {
-    return new Reminder(id, task, description, dueDate, priority, labels.toArray(new Label[0]));
+    return new Reminder(id, task, description, dueDate, priority, labels);
   }
 
   @Override

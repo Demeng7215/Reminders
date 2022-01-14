@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Point;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -80,7 +81,7 @@ public class ListView extends JPanel implements IRemindersView {
                 .collect(Collectors.toList()), () ->
                 // Open the editor with the current label already selected.
                 new ReminderEditorFrame(this, new Reminder(UUID.randomUUID().toString(),
-                    null, null, -1, null, label)))));
+                    null, null, -1, null, Collections.singletonList(label))))));
 
     // Attempt to return to a view similar to their previous one.
     for (int i = 0; i < categoryTabs.getTabCount(); i++) {
