@@ -1,9 +1,11 @@
 package me.shreymeng.reminders.manager;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import me.shreymeng.reminders.Main;
 import me.shreymeng.reminders.model.Reminder;
 import me.shreymeng.reminders.model.SortBy;
 
@@ -12,7 +14,6 @@ import me.shreymeng.reminders.model.SortBy;
  */
 public class RemindersManager {
 
-  //TODO Implement GSON file saving/loading.
   private static final Map<String, Reminder> REMINDERS = new LinkedHashMap<>();
 
   /**
@@ -22,6 +23,7 @@ public class RemindersManager {
    */
   public static void addReminder(Reminder reminder) {
     REMINDERS.put(reminder.getId(), reminder);
+    save();
   }
 
   /**
@@ -31,6 +33,7 @@ public class RemindersManager {
    */
   public static void removeReminder(Reminder reminder) {
     REMINDERS.remove(reminder.getId());
+    save();
   }
 
   /**
@@ -41,5 +44,23 @@ public class RemindersManager {
    */
   public static List<Reminder> getReminders(SortBy sort) {
     return sort.sort(new ArrayList<>(REMINDERS.values()));
+  }
+
+  /**
+   * Gets the entire reminders map that is being used internally for storage.
+   *
+   * @return The reminders map
+   */
+  public static Map<String, Reminder> getRemindersMap() {
+    return REMINDERS;
+  }
+
+  private static void save() {
+    try {
+      Main.getRemindersDataFile().save(REMINDERS.values());
+    } catch (IOException ex) {
+      ex.printStackTrace();
+      System.err.println("Failed to save reminders.");
+    }
   }
 }
