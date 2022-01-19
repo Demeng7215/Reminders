@@ -42,6 +42,7 @@ import me.shreymeng.reminders.model.Priority;
 import me.shreymeng.reminders.model.Reminder;
 import me.shreymeng.reminders.model.SortBy;
 import me.shreymeng.reminders.ui.views.IRemindersView;
+import me.shreymeng.reminders.util.Common;
 
 /**
  * The frame for creating and editing reminders.
@@ -365,27 +366,27 @@ public class ReminderEditorFrame {
 
         JButton deleteButton = new JButton("x");
         deleteButton.setPreferredSize(new Dimension(38, 18));
-        deleteButton.addActionListener(e -> {
+        deleteButton.addActionListener(e ->
+            Common.askConfirmation(dialog, "Confirm Deletion",
+                "Are you sure you want to delete label '" + label.getName() + "'?",
+                () -> {
+                  // Remove the label from all reminders.
+                  for (Reminder reminder : RemindersManager.getReminders(SortBy.DUE_DATE)) {
+                    reminder.getLabels().removeIf(l -> l.getName().equals(label.getName()));
+                  }
 
-          //TODO Confirmation menu for deleting label.
+                  // Remove label from registry.
+                  LabelsManager.removeLabel(label);
 
-          // Remove the label from all reminders.
-          for (Reminder reminder : RemindersManager.getReminders(SortBy.DUE_DATE)) {
-            reminder.getLabels().removeIf(l -> l.getName().equals(label.getName()));
-          }
+                  // Remove label from already selected list.
+                  alreadySelected.removeIf(l -> l.getName().equals(label.getName()));
 
-          // Remove label from registry.
-          LabelsManager.removeLabel(label);
+                  view.refresh();
 
-          // Remove label from already selected list.
-          alreadySelected.removeIf(l -> l.getName().equals(label.getName()));
-
-          view.refresh();
-
-          // Reopen this dialog.
-          dialog.dispose();
-          new LabelFrame(mainDialog, alreadySelected, consumer);
-        });
+                  // Reopen this dialog.
+                  dialog.dispose();
+                  new LabelFrame(mainDialog, alreadySelected, consumer);
+                }));
 
         labelPanel.add(checkBox);
         labelPanel.add(editButton);

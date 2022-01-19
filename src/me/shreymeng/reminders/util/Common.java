@@ -1,5 +1,6 @@
 package me.shreymeng.reminders.util;
 
+import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -10,6 +11,7 @@ import java.util.Date;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 /**
  * General and commonly used utilities.
@@ -67,6 +69,25 @@ public class Common {
       ex.printStackTrace();
       System.err.println("Failed to read image: " + name);
       return null;
+    }
+  }
+
+  /**
+   * Open a confirmation dialog for the user.
+   *
+   * @param parent      The component asking for confirmation
+   * @param title       The title of the dialog
+   * @param message     The message of the dialog
+   * @param confirmTask The task to run on confirmation
+   */
+  public static void askConfirmation(Component parent, String title, String message,
+      Runnable confirmTask) {
+
+    final int option = JOptionPane.showConfirmDialog(parent, message, title,
+        JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+
+    if (option == JOptionPane.YES_OPTION) {
+      confirmTask.run();
     }
   }
 }
