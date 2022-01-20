@@ -46,13 +46,16 @@ public class RemindersListPanel extends JPanel {
   public RemindersListPanel(IRemindersView view, List<Reminder> reminders, Runnable addAction) {
     this.view = view;
 
+    // The button for adding a new reminder.
     JButton addButton = new JButton("+ New Reminder");
     addButton.setPreferredSize(new Dimension(900, 25));
     addButton.addActionListener(e -> addAction.run());
 
+    // The panel containing the reminders.
     JPanel panel = new JPanel();
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
+    // Create a panel for ech reminder and add it to the list panel.
     for (Reminder reminder : reminders) {
       panel.add(reminderPanel(reminder));
       panel.add(Box.createRigidArea(new Dimension(0, 15)));
@@ -87,15 +90,18 @@ public class RemindersListPanel extends JPanel {
     panel.setMinimumSize(new Dimension(1000, 105));
     panel.setMaximumSize(new Dimension(1000, 105));
 
+    // The task name.
     JLabel titleLabel = new JLabel(reminder.getTask());
     titleLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 14));
     titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
+    // The task description.
     JLabel descriptionLabel = new JLabel(reminder.getDescription());
     descriptionLabel.setForeground(Color.GRAY);
     descriptionLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 14));
     descriptionLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
+    // The due date of the task.
     JLabel dueDateLabel = new JLabel(
         "Due: " + Common.formatDateTime(reminder.getDueDate()));
     dueDateLabel.setFont(new Font(Font.SANS_SERIF, Font.ITALIC, 14));
@@ -121,13 +127,17 @@ public class RemindersListPanel extends JPanel {
     // Buttons for interacting with the reminder.
     JPanel buttons = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
+    // The button for deleting the reminder.
     JButton completeButton = new JButton("Done");
-    completeButton.addActionListener(e -> Common.askConfirmation(Main.getMainFrame(),
-        "Confirm Completion", "Are you sure you want to remove this reminder?", () -> {
-          RemindersManager.removeReminder(reminder);
-          view.refresh();
-        }));
+    completeButton.addActionListener(e ->
+        // Ask for confirmation, then delete and refresh.
+        Common.askConfirmation(Main.getMainFrame(), "Confirm Completion",
+            "Are you sure you want to remove this reminder?", () -> {
+              RemindersManager.removeReminder(reminder);
+              view.refresh();
+            }));
 
+    // The button for editing the reminder.
     JButton editButton = new JButton("Edit");
     editButton.addActionListener(e -> new ReminderEditorFrame(view, reminder));
 

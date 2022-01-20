@@ -14,6 +14,12 @@ public enum Priority {
   private final String name;
   private final Color color;
 
+  /**
+   * Creates a new priority.
+   *
+   * @param name  The display name of the priority
+   * @param color The color of the priority
+   */
   Priority(String name, Color color) {
     this.name = name;
     this.color = color;

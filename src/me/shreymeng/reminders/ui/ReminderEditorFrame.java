@@ -95,6 +95,7 @@ public class ReminderEditorFrame {
     dueDatePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
     JLabel priorityLabel = new JLabel("Priority");
+    // Get all enums in Priority and list their display names.
     JComboBox<String> priorityDropdown = new JComboBox<>(
         Arrays.stream(Priority.values()).map(Priority::toString).toArray(String[]::new));
     priorityDropdown.setMaximumSize(new Dimension(550, 24));
@@ -113,13 +114,15 @@ public class ReminderEditorFrame {
     JButton labelsButton = new JButton("Select Labels...");
     labelsLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
     labelsButton.setAlignmentX(Component.LEFT_ALIGNMENT);
-    labelsButton.addActionListener(e -> new LabelFrame(dialog, selectedLabels, selected -> {
-      selectedLabels.clear();
-      selectedLabels.addAll(selected);
-      labelsLabel.setText("Labels (" + selectedLabels.size() + " selected)");
-    }));
+    labelsButton.addActionListener(e ->
+        // Open the dialog for editing labels.
+        new LabelFrame(dialog, selectedLabels, selected -> {
+          selectedLabels.clear();
+          selectedLabels.addAll(selected);
+          labelsLabel.setText("Labels (" + selectedLabels.size() + " selected)");
+        }));
 
-    // Add current reminder values for other fields.
+    // Add current reminder values for other fields, if applicable.
     if (current != null) {
 
       if (current.getTask() != null) {
@@ -150,9 +153,11 @@ public class ReminderEditorFrame {
     panel.add(labelsLabel);
     panel.add(labelsButton);
 
+    // The button for saving the reminder.
     JButton saveButton = new JButton("Save");
     saveButton.addActionListener(e -> {
 
+      // Block empty texts or the | character which conflicts with data.
       if (titleField.getText().isBlank() || titleField.getText().contains("|")) {
         JOptionPane.showMessageDialog(dialog, "Task name is invalid!");
         return;
@@ -163,12 +168,14 @@ public class ReminderEditorFrame {
         return;
       }
 
+      // The due date, converted to milliseconds at the current time zone.
       long dueDate = dueDatePanel.getSelected().atZone(ZoneId.systemDefault()).toInstant()
           .toEpochMilli();
 
       Reminder updatedReminder;
 
       if (current != null) {
+        // Edit the current reminder.
         current.setTask(titleField.getText());
         current.setDescription(descriptionField.getText());
         current.setDueDate(dueDate);
@@ -178,6 +185,7 @@ public class ReminderEditorFrame {
         updatedReminder = current;
 
       } else {
+        // Create a new reminder.
         updatedReminder = new Reminder(
             UUID.randomUUID().toString(),
             titleField.getText(),
@@ -212,6 +220,11 @@ public class ReminderEditorFrame {
     private final JComboBox<String> hourDropdown;
     private final JComboBox<String> minuteDropdown;
 
+    /**
+     * Creates a new due date panel.
+     *
+     * @param currentTime The time that should be selected by default, or -1 for current
+     */
     public DueDatePanel(long currentTime) {
       setLayout(new FlowLayout(FlowLayout.LEFT, 2, 0));
 
@@ -253,15 +266,20 @@ public class ReminderEditorFrame {
           return;
         }
 
+        // The number of days in the current month.
         int monthLength = YearMonth.of(selectedYear, selectedMonth).lengthOfMonth();
+        // The current selected day.
         int selectedDayIndex = dayDropdown.getSelectedIndex();
 
+        // Clear the current day dropdown.
         dayDropdown.removeAllItems();
 
+        // Add all days of the month.
         for (int i = 1; i <= monthLength; i++) {
           dayDropdown.addItem(i);
         }
 
+        // Attempt to set the day back to the previously selected, if possible.
         dayDropdown.setSelectedIndex(Math.min(selectedDayIndex, monthLength - 1));
         repaint();
       });
@@ -324,12 +342,15 @@ public class ReminderEditorFrame {
       dialog.setSize(300, 400);
       dialog.setLocationRelativeTo(null);
 
+      // The panel containing all labels.
       JPanel panel = new JPanel();
       panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
+      // The button for creating a new label.
       JButton createButton = new JButton("+ Create Label");
       createButton.addActionListener(e ->
           new LabelEditorFrame(null, dialog, () -> {
+            // Dispose of the current dialog and open the label editor.
             dialog.dispose();
             new LabelFrame(mainDialog, alreadySelected, consumer);
             view.refresh();
@@ -341,6 +362,7 @@ public class ReminderEditorFrame {
       // Add a checkbox for each label.
       for (Label label : LabelsManager.getLabels()) {
 
+        // The panel specifically for this label.
         JPanel labelPanel = new JPanel();
         labelPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         labelPanel.setMinimumSize(new Dimension(300, 30));
@@ -349,24 +371,29 @@ public class ReminderEditorFrame {
         JCheckBox checkBox = new JCheckBox("| " + label.getName());
         checkBox.setForeground(label.getColor());
 
+        // If the label is selected, mark the checkbox.
         if (alreadySelected.contains(label)) {
           checkBox.setSelected(true);
         }
 
         checkBoxes.put(label, checkBox);
 
+        // The button for editing a label.
         JButton editButton = new JButton("Edit");
         editButton.setPreferredSize(new Dimension(60, 18));
         editButton.addActionListener(e ->
+            // Dispose the current dialog and open the editor.
             new LabelEditorFrame(label, dialog, () -> {
               dialog.dispose();
               new LabelFrame(mainDialog, alreadySelected, consumer);
               view.refresh();
             }));
 
+        // The button for deleting the label.
         JButton deleteButton = new JButton("x");
         deleteButton.setPreferredSize(new Dimension(38, 18));
         deleteButton.addActionListener(e ->
+            // Ask for confirmation, then delete.
             Common.askConfirmation(dialog, "Confirm Deletion",
                 "Are you sure you want to delete label '" + label.getName() + "'?",
                 () -> {
@@ -452,11 +479,13 @@ public class ReminderEditorFrame {
       categoryCheckBox.setAlignmentX(Component.LEFT_ALIGNMENT);
 
       JLabel colorLabel = new JLabel("Color");
+      // A color chooser with black as the default color.
       JColorChooser colorSelector = new JColorChooser(
           existing == null ? Color.BLACK : existing.getColor());
       colorLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
       colorSelector.setAlignmentX(Component.LEFT_ALIGNMENT);
 
+      // Set the current values if applicable.
       if (existing != null) {
         nameField.setText(existing.getName());
         categoryCheckBox.setSelected(existing.isCategory());
@@ -477,19 +506,21 @@ public class ReminderEditorFrame {
 
         String name = nameField.getText();
 
+        // Make sure the name is not blank and does not contain invalid characters.
         if (name.isBlank() || name.contains("|")) {
           JOptionPane.showMessageDialog(null, "Label name is invalid!");
           return;
         }
 
         if (existing == null) {
-          // Create a new label.
+          // Check for duplicates.
           if (LabelsManager.getLabels().stream()
               .anyMatch(l -> l.getName().equalsIgnoreCase(name))) {
             JOptionPane.showMessageDialog(null, "This label already exists!");
             return;
           }
 
+          // Create a new label.
           LabelsManager.addLabel(new Label(
               name,
               colorSelector.getColor(),

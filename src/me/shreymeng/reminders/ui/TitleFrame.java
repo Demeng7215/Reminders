@@ -65,6 +65,7 @@ public class TitleFrame {
     button.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 24));
     button.setBounds(502, 360, 275, 75);
     button.addActionListener(e -> {
+      // Open the main menu and dispose of the title page.
       new MainFrame();
       frame.dispose();
     });

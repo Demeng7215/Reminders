@@ -55,6 +55,9 @@ public class RemindersManager {
     return REMINDERS;
   }
 
+  /**
+   * Saves all reminders in memory to the data file.
+   */
   public static void save() {
     try {
       Main.getRemindersDataFile().save(REMINDERS.values());

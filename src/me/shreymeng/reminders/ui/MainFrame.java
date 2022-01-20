@@ -23,10 +23,12 @@ public class MainFrame {
     frame.setSize(1280, 720);
     frame.setLocationRelativeTo(null);
 
+    // The tabbed pane containing available views.
     JTabbedPane tabs = new JTabbedPane();
     tabs.add("My Reminders", new ListView());
     tabs.add("Calendar", new CalendarView());
 
+    // Refresh the view on click.
     tabs.addChangeListener(
         e -> ((IRemindersView) tabs.getComponentAt(tabs.getSelectedIndex())).refresh());
 
