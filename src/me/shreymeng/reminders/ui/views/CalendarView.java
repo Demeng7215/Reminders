@@ -367,11 +367,10 @@ public class CalendarView extends JPanel implements IRemindersView {
      */
     private void addListPanel() {
       dialog.add(new RemindersListPanel(DayView.this,
-          getRemindersFromDay(year, month + 1, day), () -> {
-        // Open the editor with the date already selected.
-        new ReminderEditorFrame(DayView.this, new Reminder(UUID.randomUUID().toString(),
-            null, null, dateMillis, null, Collections.emptyList()));
-      }));
+          getRemindersFromDay(year, month + 1, day), () ->
+          // Open the editor with the date already selected.
+          new ReminderEditorFrame(DayView.this, new Reminder(UUID.randomUUID().toString(),
+              null, null, dateMillis, null, Collections.emptyList()))));
     }
 
     @Override

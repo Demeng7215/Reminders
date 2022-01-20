@@ -97,18 +97,6 @@ public class Reminder {
     return labels;
   }
 
-  public void addLabel(Label label) {
-    this.labels.add(label);
-  }
-
-  public void removeLabel(Label label) {
-    this.labels.remove(label);
-  }
-
-  public Reminder copy() {
-    return new Reminder(id, task, description, dueDate, priority, labels);
-  }
-
   @Override
   public String toString() {
     return "Reminder{" +
