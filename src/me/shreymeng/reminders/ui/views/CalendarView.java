@@ -38,6 +38,9 @@ import me.shreymeng.reminders.model.SortBy;
 import me.shreymeng.reminders.ui.ReminderEditorFrame;
 import me.shreymeng.reminders.ui.RemindersListPanel;
 
+/**
+ * The panel displaying reminders in a calendar.
+ */
 public class CalendarView extends JPanel implements IRemindersView {
 
   private static final String[] MONTHS = {"January", "February", "March", "April", "May", "June",
