@@ -158,7 +158,7 @@ public class ReminderEditorFrame {
     saveButton.addActionListener(e -> {
 
       // Block empty texts or the | character which conflicts with data.
-      if (titleField.getText().isBlank() || titleField.getText().contains("|")) {
+      if (titleField.getText().isEmpty() || titleField.getText().contains("|")) {
         JOptionPane.showMessageDialog(dialog, "Task name is invalid!");
         return;
       }
@@ -507,7 +507,7 @@ public class ReminderEditorFrame {
         String name = nameField.getText();
 
         // Make sure the name is not blank and does not contain invalid characters.
-        if (name.isBlank() || name.contains("|")) {
+        if (name.isEmpty() || name.contains("|")) {
           JOptionPane.showMessageDialog(null, "Label name is invalid!");
           return;
         }
