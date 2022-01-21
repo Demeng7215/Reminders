@@ -62,8 +62,7 @@ public class RemindersManager {
     try {
       Main.getRemindersDataFile().save(REMINDERS.values());
     } catch (IOException ex) {
-      ex.printStackTrace();
-      System.err.println("Failed to save reminders.");
+      System.err.println("Failed to save reminders: " + ex.getMessage());
     }
   }
 }

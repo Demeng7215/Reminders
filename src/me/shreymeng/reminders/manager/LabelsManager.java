@@ -49,8 +49,7 @@ public class LabelsManager {
     try {
       Main.getLabelsDataFile().save(LABELS);
     } catch (IOException ex) {
-      ex.printStackTrace();
-      System.err.println("Failed to save labels.");
+      System.err.println("Failed to save labels: " + ex.getMessage());
     }
   }
 }

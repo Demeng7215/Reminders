@@ -71,8 +71,7 @@ public class Common {
       return new JLabel(
           new ImageIcon(ImageIO.read(new File(ASSETS_FOLDER + File.separator + name))));
     } catch (IOException ex) {
-      ex.printStackTrace();
-      System.err.println("Failed to read image: " + name);
+      System.err.println("Failed to read image: " + ex.getMessage());
       return null;
     }
   }
