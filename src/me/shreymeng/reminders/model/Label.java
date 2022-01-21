@@ -8,17 +8,8 @@ import java.awt.Color;
  */
 public class Label {
 
-  /**
-   * The name of the label.
-   */
   private String name;
-  /**
-   * The color of the label, as seen in the GUI.
-   */
   private Color color;
-  /**
-   * If this label is a category and should have its own tab in the GUI.
-   */
   private boolean category;
 
   /**
@@ -34,26 +25,56 @@ public class Label {
     this.category = category;
   }
 
+  /**
+   * Gets the name of the label.
+   *
+   * @return The name of the label
+   */
   public String getName() {
     return name;
   }
 
+  /**
+   * Gets the color of the label, as seen in the GUI.
+   *
+   * @return The color of the label
+   */
   public Color getColor() {
     return color;
   }
 
+  /**
+   * Gets if this label is a category and should have its own tab in the GUI.
+   *
+   * @return true if category, false otherwise
+   */
   public boolean isCategory() {
     return category;
   }
 
+  /**
+   * Sets {@link #getName()}.
+   *
+   * @param name The new name
+   */
   public void setName(String name) {
     this.name = name;
   }
 
+  /**
+   * Sets {@link #getColor()}.
+   *
+   * @param color The new color
+   */
   public void setColor(Color color) {
     this.color = color;
   }
 
+  /**
+   * Sets {@link #isCategory()}.
+   *
+   * @param category If this label should have its own tab
+   */
   public void setCategory(boolean category) {
     this.category = category;
   }
