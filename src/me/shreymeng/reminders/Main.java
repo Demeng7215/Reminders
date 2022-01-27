@@ -14,20 +14,10 @@ import me.shreymeng.reminders.ui.TitleFrame;
 
 public class Main {
 
-  public static final String VERSION = "2.0-2022-01-17";
+  public static final String VERSION = "3.0-2022-01-30";
 
-  /**
-   * The data file containing all information on labels.
-   */
   private static LabelsDataFile labelsDataFile;
-  /**
-   * The data file containing all information on reminders.
-   */
   private static RemindersDataFile remindersDataFile;
-
-  /**
-   * The main GUI frame of the application.
-   */
   private static Frame mainFrame;
 
   public static void main(String[] args) {
@@ -62,18 +52,32 @@ public class Main {
     EventQueue.invokeLater(TitleFrame::new);
   }
 
+  /**
+   * Gets the data file containing all information on labels.
+   */
   public static LabelsDataFile getLabelsDataFile() {
     return labelsDataFile;
   }
 
+  /**
+   * Gets the data file containing all information on reminders.
+   */
   public static RemindersDataFile getRemindersDataFile() {
     return remindersDataFile;
   }
 
+  /**
+   * Gets the main GUI frame of the application.
+   */
   public static Frame getMainFrame() {
     return mainFrame;
   }
 
+  /**
+   * Sets {@link #getMainFrame()}.
+   *
+   * @param newMainFrame The new main frame
+   */
   public static void setMainFrame(Frame newMainFrame) {
     mainFrame = newMainFrame;
   }
