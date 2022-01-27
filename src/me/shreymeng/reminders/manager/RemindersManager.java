@@ -55,12 +55,14 @@ public class RemindersManager {
     return REMINDERS;
   }
 
+  /**
+   * Saves all reminders in memory to the data file.
+   */
   public static void save() {
     try {
       Main.getRemindersDataFile().save(REMINDERS.values());
     } catch (IOException ex) {
-      ex.printStackTrace();
-      System.err.println("Failed to save reminders.");
+      System.err.println("Failed to save reminders: " + ex.getMessage());
     }
   }
 }

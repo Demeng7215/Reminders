@@ -37,21 +37,26 @@ public class Common {
    */
   public static String formatDateTime(long dateTime) {
 
+    // The formatted date and time.
     String formatted;
 
+    // The local date and time.
     LocalDateTime localDate = new Date(dateTime)
         .toInstant()
         .atZone(ZoneId.systemDefault())
         .toLocalDateTime();
 
+    // If the time should be included (time is not 00:00).
     boolean includeTime = !(localDate.getHour() == 0 && localDate.getMinute() == 0);
 
     if (localDate.getYear() == LocalDate.now().getYear()) {
+      // Exclude the year if it is the current year.
       formatted = localDate.format(includeTime ? DATE_TIME_NO_YEAR_FORMAT : DATE_NO_YEAR_FORMAT);
     } else {
       formatted = localDate.format(includeTime ? DATE_TIME_FORMAT : DATE_FORMAT);
     }
 
+    // Remove all periods from the formatted date and return.
     return formatted.replace(".", "");
   }
 
@@ -66,8 +71,7 @@ public class Common {
       return new JLabel(
           new ImageIcon(ImageIO.read(new File(ASSETS_FOLDER + File.separator + name))));
     } catch (IOException ex) {
-      ex.printStackTrace();
-      System.err.println("Failed to read image: " + name);
+      System.err.println("Failed to read image: " + ex.getMessage());
       return null;
     }
   }

@@ -11,30 +11,11 @@ import me.shreymeng.reminders.util.Common;
  */
 public class Reminder {
 
-  /**
-   * The randomly generated ID of the reminder, used for identification.
-   */
   private final String id;
-
-  /**
-   * The reminder task.
-   */
   private String task;
-  /**
-   * A description of the task.
-   */
   private String description;
-  /**
-   * The due date of the task, in unix epoch (milliseconds).
-   */
   private long dueDate;
-  /**
-   * The priority of the task.
-   */
   private Priority priority;
-  /**
-   * All labels belonging to the task.
-   */
   private final Set<Label> labels = new LinkedHashSet<>();
 
   /**
@@ -57,56 +38,94 @@ public class Reminder {
     this.labels.addAll(labels);
   }
 
+  /**
+   * Gets the randomly generated ID of the reminder, used for identification.
+   *
+   * @return The unique ID
+   */
   public String getId() {
     return id;
   }
 
+  /**
+   * Gets the reminder task title.
+   *
+   * @return The task title
+   */
   public String getTask() {
     return task;
   }
 
+  /**
+   * Sets {@link #getTask()}.
+   *
+   * @param task The new task title
+   */
   public void setTask(String task) {
     this.task = task;
   }
 
+  /**
+   * Gets the description of the task.
+   *
+   * @return The description
+   */
   public String getDescription() {
     return description;
   }
 
+  /**
+   * Sets {@link #getDescription()}.
+   *
+   * @param description The new description
+   */
   public void setDescription(String description) {
     this.description = description;
   }
 
+  /**
+   * Gets the due date of the task, in unix epoch (milliseconds).
+   *
+   * @return The due date in milliseconds since unix epoch
+   */
   public long getDueDate() {
     return dueDate;
   }
 
+  /**
+   * Sets {@link #getDueDate()}.
+   *
+   * @param dueDate The new date, in milliseconds since unix epoch
+   */
   public void setDueDate(long dueDate) {
     this.dueDate = dueDate;
   }
 
+  /**
+   * Gets the priority of the task.
+   *
+   * @return The priority
+   */
   public Priority getPriority() {
     return priority;
   }
 
+  /**
+   * Sets {@link #getPriority()}
+   *
+   * @param priority The new priority
+   */
   public void setPriority(Priority priority) {
     this.priority = priority;
   }
 
+  /**
+   * Gets all labels belonging to the task.
+   *
+   * @return The set of labels
+   */
   public Set<Label> getLabels() {
     return labels;
-  }
-
-  public void addLabel(Label label) {
-    this.labels.add(label);
-  }
-
-  public void removeLabel(Label label) {
-    this.labels.remove(label);
-  }
-
-  public Reminder copy() {
-    return new Reminder(id, task, description, dueDate, priority, labels);
   }
 
   @Override

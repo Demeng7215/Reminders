@@ -26,7 +26,6 @@ public class Main {
     try {
       UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
     } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-      ex.printStackTrace();
       System.err.println("Unsupported operating system.");
     }
 
@@ -44,8 +43,7 @@ public class Main {
       }
 
     } catch (IOException ex) {
-      ex.printStackTrace();
-      System.err.println("Failed to load data.");
+      System.err.println("Failed to load data: " + ex.getMessage());
     }
 
     // Create and open the title GUI.

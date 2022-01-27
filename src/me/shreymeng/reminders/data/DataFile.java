@@ -43,6 +43,7 @@ public abstract class DataFile<T> {
    * Loads the list of objects from the file.
    *
    * @return The deserialized list of objects
+   * @throws IOException If there was an IO error while loading the file
    */
   protected abstract List<T> load() throws IOException;
 
@@ -50,6 +51,7 @@ public abstract class DataFile<T> {
    * Saves the list of objects from the file.
    *
    * @param list The list of objects to save
+   * @throws IOException If there was an IO error while saving the file
    */
   protected abstract void save(Collection<T> list) throws IOException;
 

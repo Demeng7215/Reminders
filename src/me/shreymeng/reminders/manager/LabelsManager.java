@@ -42,12 +42,14 @@ public class LabelsManager {
     return LABELS;
   }
 
+  /**
+   * Saves all labels in memory to the data file.
+   */
   public static void save() {
     try {
       Main.getLabelsDataFile().save(LABELS);
     } catch (IOException ex) {
-      ex.printStackTrace();
-      System.err.println("Failed to save labels.");
+      System.err.println("Failed to save labels: " + ex.getMessage());
     }
   }
 }
